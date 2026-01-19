@@ -15,36 +15,9 @@ const Maps = () => {
     setData(getAnalysisData());
   }, []);
 
-  // Show map even without data for demo purposes
-  const hasGeoModule = data?.modules?.modGeo ?? true;
-
-  const { modules } = data;
-
-  if (!modules.modGeo) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background">
-        <Header />
-        <main className="flex-1 container py-8">
-          <Card className="max-w-lg mx-auto">
-            <CardContent className="py-12 text-center">
-              <MapPin className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h2 className="text-xl font-semibold mb-2">Geographic Module Not Selected</h2>
-              <p className="text-muted-foreground mb-4">
-                Please enable the "State / District-wise impact" module in the Input page to view maps.
-              </p>
-              <Link
-                to="/"
-                className="inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
-              >
-                Go to Input
-              </Link>
-            </CardContent>
-          </Card>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  // Show map even without running analysis (for demo purposes)
+  // Only hide map if user explicitly ran analysis WITHOUT the geo module
+  const shouldShowMap = !data || data.modules.modGeo;
 
   const handleStateClick = (stateId: string) => {
     setSelectedState(selectedState === stateId ? null : stateId);
@@ -90,6 +63,32 @@ const Maps = () => {
   };
 
   const selectedDetails = selectedState ? stateDetails[selectedState] : null;
+
+  if (!shouldShowMap) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Header />
+        <main className="flex-1 container py-8">
+          <Card className="max-w-lg mx-auto">
+            <CardContent className="py-12 text-center">
+              <MapPin className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h2 className="text-xl font-semibold mb-2">Geographic Module Not Selected</h2>
+              <p className="text-muted-foreground mb-4">
+                Please enable the "State / District-wise impact" module in the Input page to view maps.
+              </p>
+              <Link
+                to="/"
+                className="inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
+              >
+                Go to Input
+              </Link>
+            </CardContent>
+          </Card>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
