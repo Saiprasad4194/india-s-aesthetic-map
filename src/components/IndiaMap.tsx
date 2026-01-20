@@ -15,15 +15,6 @@ interface IndiaMapProps {
   selectedState?: string | null;
 }
 
-interface StateInfo {
-  id: string;
-  name: string;
-  path: string;
-  labelX: number;
-  labelY: number;
-  color: string;
-}
-
 const defaultStateData: StateData[] = [
   { id: "JK", name: "Jammu & Kashmir", impact: "neutral", score: 72 },
   { id: "LA", name: "Ladakh", impact: "neutral", score: 68 },
@@ -61,309 +52,279 @@ const defaultStateData: StateData[] = [
   { id: "PY", name: "Puducherry", impact: "positive", score: 78 },
 ];
 
-// Color palette inspired by the reference image
+// Distinct bright colors matching the reference image style
 const stateColors: Record<string, string> = {
-  JK: "#4CAF50", // Green
-  LA: "#8BC34A", // Light Green
-  HP: "#FF9800", // Orange
-  PB: "#FFEB3B", // Yellow
-  HR: "#E91E63", // Pink
-  UK: "#9C27B0", // Purple
-  DL: "#F44336", // Red
-  RJ: "#795548", // Brown
-  UP: "#FFEB3B", // Yellow
-  BR: "#4CAF50", // Green
-  SK: "#FF9800", // Orange
-  AR: "#F44336", // Red
-  NL: "#4CAF50", // Green
-  MN: "#E91E63", // Pink
-  MZ: "#03A9F4", // Light Blue
-  TR: "#FFEB3B", // Yellow
-  ML: "#FF9800", // Orange
-  AS: "#8BC34A", // Light Green
-  WB: "#03A9F4", // Light Blue
-  JH: "#4CAF50", // Green
-  OR: "#9C27B0", // Purple
-  CT: "#FFEB3B", // Yellow
-  MP: "#FF9800", // Orange
-  GJ: "#E91E63", // Pink
-  MH: "#795548", // Brown
-  GA: "#03A9F4", // Light Blue
-  KA: "#F44336", // Red
-  AP: "#8BC34A", // Light Green
-  TG: "#E91E63", // Pink
-  TN: "#FFEB3B", // Yellow
-  KL: "#4CAF50", // Green
-  AN: "#4CAF50", // Green
-  LD: "#03A9F4", // Light Blue
-  PY: "#FF9800", // Orange
+  JK: "#4CAF50",   // Green
+  LA: "#9C27B0",   // Purple
+  HP: "#FF5722",   // Deep Orange
+  PB: "#FFEB3B",   // Yellow
+  HR: "#E91E63",   // Pink
+  UK: "#00BCD4",   // Cyan
+  DL: "#F44336",   // Red
+  RJ: "#FFC107",   // Amber
+  UP: "#8BC34A",   // Light Green
+  BR: "#03A9F4",   // Light Blue
+  SK: "#FF9800",   // Orange
+  AR: "#673AB7",   // Deep Purple
+  NL: "#4CAF50",   // Green
+  MN: "#E91E63",   // Pink
+  MZ: "#00BCD4",   // Cyan
+  TR: "#FFEB3B",   // Yellow
+  ML: "#FF5722",   // Deep Orange
+  AS: "#9C27B0",   // Purple
+  WB: "#2196F3",   // Blue
+  JH: "#8BC34A",   // Light Green
+  OR: "#FF9800",   // Orange
+  CT: "#CDDC39",   // Lime
+  MP: "#FF5722",   // Deep Orange
+  GJ: "#E91E63",   // Pink
+  MH: "#9C27B0",   // Purple
+  GA: "#00BCD4",   // Cyan
+  KA: "#F44336",   // Red
+  TG: "#E91E63",   // Pink
+  AP: "#8BC34A",   // Light Green
+  TN: "#FFEB3B",   // Yellow
+  KL: "#4CAF50",   // Green
+  AN: "#03A9F4",   // Light Blue
+  LD: "#00BCD4",   // Cyan
+  PY: "#FF9800",   // Orange
+  DD: "#9C27B0",   // Purple (Daman & Diu)
+  DN: "#CDDC39",   // Lime (Dadra & Nagar Haveli)
+  CH: "#FF5722",   // Deep Orange (Chandigarh)
 };
 
-// Accurate India map state paths
-const statesData: StateInfo[] = [
+// Accurate SVG paths for India map states
+const statesData = [
   {
     id: "JK",
-    name: "Jammu & Kashmir",
-    path: "M155,35 L175,25 L200,30 L220,25 L240,35 L255,55 L250,80 L235,95 L215,90 L195,100 L175,90 L160,95 L145,75 L140,55 Z",
-    labelX: 185,
-    labelY: 60,
-    color: stateColors.JK,
+    name: "Jammu &\nKashmir",
+    path: "M165,45 L185,35 L205,40 L225,35 L245,50 L260,75 L255,105 L240,125 L220,115 L200,130 L175,115 L155,125 L135,100 L130,70 L145,55 Z",
+    labelX: 180,
+    labelY: 80,
   },
   {
     id: "LA",
     name: "Ladakh",
-    path: "M240,35 L275,25 L310,35 L330,55 L325,80 L300,90 L275,85 L255,70 L255,55 Z",
-    labelX: 280,
-    labelY: 55,
-    color: stateColors.LA,
+    path: "M245,50 L280,40 L320,55 L340,80 L335,115 L305,130 L275,120 L260,95 L260,75 Z",
+    labelX: 290,
+    labelY: 85,
   },
   {
     id: "HP",
-    name: "Himachal Pradesh",
-    path: "M195,100 L215,90 L235,95 L250,105 L245,125 L230,140 L210,135 L195,145 L180,130 L175,115 Z",
-    labelX: 210,
-    labelY: 118,
-    color: stateColors.HP,
+    name: "Himachal\nPradesh",
+    path: "M200,130 L220,115 L245,125 L265,140 L258,165 L240,180 L215,175 L195,185 L175,168 L170,145 Z",
+    labelX: 215,
+    labelY: 155,
   },
   {
     id: "PB",
     name: "Punjab",
-    path: "M145,105 L175,90 L180,115 L195,130 L185,155 L165,165 L140,155 L130,130 Z",
-    labelX: 155,
-    labelY: 130,
-    color: stateColors.PB,
+    path: "M135,135 L170,120 L175,150 L195,168 L185,195 L160,205 L130,192 L118,162 Z",
+    labelX: 152,
+    labelY: 165,
   },
   {
     id: "HR",
     name: "Haryana",
-    path: "M165,165 L185,155 L210,150 L230,160 L240,180 L225,200 L200,210 L175,200 L165,180 Z",
-    labelX: 195,
-    labelY: 180,
-    color: stateColors.HR,
+    path: "M160,205 L185,195 L215,190 L238,205 L250,230 L232,255 L200,265 L168,250 L158,225 Z",
+    labelX: 198,
+    labelY: 228,
   },
   {
     id: "DL",
     name: "Delhi",
-    path: "M210,185 L220,180 L228,190 L222,200 L212,198 Z",
-    labelX: 218,
-    labelY: 192,
-    color: stateColors.DL,
+    path: "M218,238 L230,230 L240,242 L232,255 L220,252 Z",
+    labelX: 228,
+    labelY: 245,
   },
   {
     id: "UK",
     name: "Uttarakhand",
-    path: "M230,140 L260,125 L290,135 L300,160 L280,180 L255,175 L240,180 L230,160 Z",
-    labelX: 260,
-    labelY: 155,
-    color: stateColors.UK,
+    path: "M240,180 L275,165 L310,178 L322,208 L298,235 L268,228 L250,235 L238,210 Z",
+    labelX: 275,
+    labelY: 205,
   },
   {
     id: "RJ",
     name: "Rajasthan",
-    path: "M85,195 L130,175 L165,180 L200,195 L210,230 L200,280 L180,320 L140,340 L95,325 L70,280 L65,230 Z",
-    labelX: 130,
-    labelY: 265,
-    color: stateColors.RJ,
+    path: "M70,250 L118,225 L158,235 L200,255 L218,295 L205,355 L180,405 L130,428 L80,410 L52,355 L48,295 Z",
+    labelX: 125,
+    labelY: 335,
   },
   {
     id: "UP",
-    name: "Uttar Pradesh",
-    path: "M210,210 L240,195 L280,190 L330,205 L365,245 L370,290 L345,315 L300,325 L255,315 L225,285 L210,250 Z",
-    labelX: 285,
-    labelY: 260,
-    color: stateColors.UP,
+    name: "Uttar\nPradesh",
+    path: "M218,265 L252,245 L298,238 L355,258 L398,305 L405,360 L375,395 L320,410 L268,398 L232,360 L215,315 Z",
+    labelX: 305,
+    labelY: 330,
   },
   {
     id: "BR",
     name: "Bihar",
-    path: "M370,275 L405,255 L440,265 L455,295 L445,330 L410,345 L375,335 L365,305 Z",
-    labelX: 410,
-    labelY: 300,
-    color: stateColors.BR,
+    path: "M405,345 L445,320 L485,335 L505,372 L492,415 L450,435 L408,422 L395,385 Z",
+    labelX: 448,
+    labelY: 378,
   },
   {
     id: "SK",
     name: "Sikkim",
-    path: "M440,240 L455,232 L465,245 L458,262 L445,258 Z",
-    labelX: 452,
-    labelY: 248,
-    color: stateColors.SK,
+    path: "M482,300 L500,290 L512,308 L502,328 L488,322 Z",
+    labelX: 495,
+    labelY: 312,
   },
   {
     id: "AS",
     name: "Assam",
-    path: "M465,255 L495,245 L535,250 L565,265 L555,290 L530,300 L500,295 L475,300 L460,285 L455,270 Z",
-    labelX: 510,
-    labelY: 275,
-    color: stateColors.AS,
+    path: "M512,320 L548,308 L595,318 L630,338 L618,370 L588,382 L552,375 L522,382 L505,362 L498,340 Z",
+    labelX: 558,
+    labelY: 350,
   },
   {
     id: "AR",
-    name: "Arunachal Pradesh",
-    path: "M505,195 L550,185 L590,200 L595,235 L565,255 L530,250 L495,245 L490,220 Z",
-    labelX: 545,
-    labelY: 220,
-    color: stateColors.AR,
+    name: "Arunachal\nPradesh",
+    path: "M558,255 L610,242 L658,262 L665,305 L628,332 L588,322 L548,310 L540,278 Z",
+    labelX: 605,
+    labelY: 285,
   },
   {
     id: "NL",
     name: "Nagaland",
-    path: "M555,275 L575,268 L590,285 L582,305 L562,298 Z",
-    labelX: 572,
-    labelY: 286,
-    color: stateColors.NL,
+    path: "M618,355 L642,345 L662,365 L652,392 L628,382 Z",
+    labelX: 638,
+    labelY: 368,
   },
   {
     id: "MN",
     name: "Manipur",
-    path: "M562,305 L582,305 L588,330 L575,345 L558,335 Z",
-    labelX: 572,
-    labelY: 325,
-    color: stateColors.MN,
+    path: "M628,392 L652,392 L662,422 L645,442 L622,430 Z",
+    labelX: 640,
+    labelY: 415,
   },
   {
     id: "MZ",
     name: "Mizoram",
-    path: "M535,335 L555,330 L570,350 L562,385 L540,378 L530,355 Z",
-    labelX: 548,
-    labelY: 358,
-    color: stateColors.MZ,
+    path: "M595,432 L620,425 L638,450 L628,492 L602,482 L588,452 Z",
+    labelX: 610,
+    labelY: 458,
   },
   {
     id: "TR",
     name: "Tripura",
-    path: "M508,335 L525,328 L535,350 L525,375 L508,365 Z",
-    labelX: 518,
-    labelY: 352,
-    color: stateColors.TR,
+    path: "M568,428 L588,418 L602,445 L590,478 L568,465 Z",
+    labelX: 582,
+    labelY: 448,
   },
   {
     id: "ML",
     name: "Meghalaya",
-    path: "M475,300 L510,295 L530,305 L525,325 L495,330 L475,320 Z",
-    labelX: 502,
-    labelY: 312,
-    color: stateColors.ML,
+    path: "M522,378 L562,370 L592,385 L585,412 L548,420 L520,408 Z",
+    labelX: 555,
+    labelY: 395,
   },
   {
     id: "WB",
-    name: "West Bengal",
-    path: "M445,330 L475,320 L495,340 L500,380 L485,420 L465,435 L445,420 L435,380 L430,350 Z",
-    labelX: 462,
-    labelY: 380,
-    color: stateColors.WB,
+    name: "West\nBengal",
+    path: "M492,420 L525,408 L550,432 L558,480 L540,535 L515,555 L490,538 L478,490 L472,448 Z",
+    labelX: 512,
+    labelY: 485,
   },
   {
     id: "JH",
     name: "Jharkhand",
-    path: "M375,340 L410,345 L435,355 L430,395 L400,410 L365,395 L355,365 Z",
-    labelX: 392,
-    labelY: 375,
-    color: stateColors.JH,
+    path: "M408,430 L450,438 L480,455 L475,505 L440,525 L398,508 L385,468 Z",
+    labelX: 432,
+    labelY: 475,
   },
   {
     id: "OR",
     name: "Odisha",
-    path: "M355,400 L400,410 L430,430 L425,480 L385,510 L345,495 L330,450 L335,415 Z",
-    labelX: 375,
-    labelY: 455,
-    color: stateColors.OR,
+    path: "M385,510 L440,525 L478,550 L472,610 L425,650 L378,632 L355,575 L362,525 Z",
+    labelX: 418,
+    labelY: 580,
   },
   {
     id: "CT",
     name: "Chhattisgarh",
-    path: "M280,360 L340,355 L355,395 L340,445 L300,465 L260,445 L255,400 Z",
-    labelX: 300,
-    labelY: 410,
-    color: stateColors.CT,
+    path: "M305,455 L375,448 L388,498 L372,560 L325,585 L278,562 L268,505 Z",
+    labelX: 325,
+    labelY: 520,
   },
   {
     id: "MP",
-    name: "Madhya Pradesh",
-    path: "M175,320 L225,300 L280,315 L325,335 L340,355 L280,360 L255,400 L205,395 L165,370 L150,340 Z",
-    labelX: 235,
-    labelY: 350,
-    color: stateColors.MP,
+    name: "Madhya\nPradesh",
+    path: "M175,400 L235,378 L305,398 L358,422 L375,450 L305,458 L272,510 L212,502 L160,468 L140,430 Z",
+    labelX: 252,
+    labelY: 445,
   },
   {
     id: "GJ",
     name: "Gujarat",
-    path: "M55,320 L95,310 L135,330 L165,355 L155,400 L130,445 L95,465 L55,440 L35,395 L40,350 Z",
-    labelX: 95,
-    labelY: 390,
-    color: stateColors.GJ,
+    path: "M38,405 L80,395 L128,418 L162,450 L150,510 L118,565 L78,590 L35,558 L12,498 L18,445 Z",
+    labelX: 85,
+    labelY: 495,
   },
   {
     id: "MH",
     name: "Maharashtra",
-    path: "M130,430 L165,400 L205,395 L260,435 L290,475 L275,530 L220,555 L165,535 L130,495 L120,460 Z",
-    labelX: 195,
-    labelY: 480,
-    color: stateColors.MH,
+    path: "M118,548 L162,512 L218,505 L282,552 L318,600 L300,665 L238,695 L168,672 L125,625 L110,578 Z",
+    labelX: 208,
+    labelY: 608,
   },
   {
     id: "GA",
     name: "Goa",
-    path: "M145,535 L168,528 L178,550 L162,565 L142,555 Z",
-    labelX: 158,
-    labelY: 548,
-    color: stateColors.GA,
+    path: "M145,678 L172,668 L185,695 L165,715 L140,702 Z",
+    labelX: 160,
+    labelY: 695,
   },
   {
     id: "KA",
     name: "Karnataka",
-    path: "M145,560 L180,545 L225,555 L265,545 L280,590 L265,640 L220,665 L170,645 L145,600 Z",
-    labelX: 205,
-    labelY: 600,
-    color: stateColors.KA,
+    path: "M145,718 L188,698 L245,710 L290,698 L310,752 L292,815 L238,845 L172,822 L142,765 Z",
+    labelX: 218,
+    labelY: 770,
   },
   {
     id: "TG",
     name: "Telangana",
-    path: "M260,450 L305,455 L350,475 L365,510 L345,545 L295,545 L265,520 L255,485 Z",
-    labelX: 305,
-    labelY: 500,
-    color: stateColors.TG,
+    path: "M280,568 L335,575 L385,598 L402,645 L378,692 L320,695 L285,665 L270,612 Z",
+    labelX: 332,
+    labelY: 638,
   },
   {
     id: "AP",
-    name: "Andhra Pradesh",
-    path: "M265,545 L345,545 L385,525 L400,565 L385,620 L340,660 L295,640 L265,590 L265,565 Z",
-    labelX: 335,
-    labelY: 590,
-    color: stateColors.AP,
+    name: "Andhra\nPradesh",
+    path: "M290,700 L378,698 L425,672 L448,722 L430,788 L375,838 L318,815 L288,755 L285,718 Z",
+    labelX: 365,
+    labelY: 758,
   },
   {
     id: "TN",
-    name: "Tamil Nadu",
-    path: "M220,665 L275,645 L325,665 L355,710 L325,750 L270,760 L235,730 L210,695 Z",
-    labelX: 280,
-    labelY: 710,
-    color: stateColors.TN,
+    name: "Tamil\nNadu",
+    path: "M240,852 L302,828 L362,855 L398,908 L362,958 L298,972 L255,935 L222,888 Z",
+    labelX: 308,
+    labelY: 905,
   },
   {
     id: "KL",
     name: "Kerala",
-    path: "M175,660 L220,665 L230,710 L215,755 L195,770 L175,740 L165,695 Z",
-    labelX: 195,
-    labelY: 715,
-    color: stateColors.KL,
+    path: "M178,838 L240,852 L252,905 L235,965 L210,985 L178,950 L165,892 Z",
+    labelX: 208,
+    labelY: 912,
   },
   {
     id: "AN",
-    name: "Andaman & Nicobar",
-    path: "M520,545 L535,540 L545,580 L540,640 L530,680 L515,675 L510,620 L515,570 Z",
-    labelX: 525,
-    labelY: 610,
-    color: stateColors.AN,
+    name: "Andaman &\nNicobar",
+    path: "M595,705 L615,698 L628,745 L622,820 L608,875 L590,868 L582,795 L588,738 Z",
+    labelX: 605,
+    labelY: 785,
   },
   {
     id: "LD",
     name: "Lakshadweep",
-    path: "M95,620 L110,615 L115,650 L105,665 L90,658 Z",
-    labelX: 102,
-    labelY: 640,
-    color: stateColors.LD,
+    path: "M82,800 L102,792 L110,835 L98,860 L78,850 Z",
+    labelX: 92,
+    labelY: 828,
   },
 ];
 
@@ -376,9 +337,7 @@ const IndiaMap = ({ stateData = defaultStateData, onStateClick, selectedState }:
   const [startPan, setStartPan] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const getImpactColor = (stateId: string) => {
-    const state = stateData.find((s) => s.id === stateId);
-    if (!state) return stateColors[stateId] || "#E0E0E0";
+  const getStateColor = (stateId: string) => {
     return stateColors[stateId] || "#E0E0E0";
   };
 
@@ -454,7 +413,7 @@ const IndiaMap = ({ stateData = defaultStateData, onStateClick, selectedState }:
           variant="outline"
           size="icon"
           onClick={handleZoomIn}
-          className="bg-card/90 backdrop-blur-sm shadow-lg border-border hover:bg-accent"
+          className="bg-white/90 backdrop-blur-sm shadow-lg border-gray-300 hover:bg-gray-100"
         >
           <ZoomIn className="h-4 w-4" />
         </Button>
@@ -462,7 +421,7 @@ const IndiaMap = ({ stateData = defaultStateData, onStateClick, selectedState }:
           variant="outline"
           size="icon"
           onClick={handleZoomOut}
-          className="bg-card/90 backdrop-blur-sm shadow-lg border-border hover:bg-accent"
+          className="bg-white/90 backdrop-blur-sm shadow-lg border-gray-300 hover:bg-gray-100"
         >
           <ZoomOut className="h-4 w-4" />
         </Button>
@@ -470,36 +429,36 @@ const IndiaMap = ({ stateData = defaultStateData, onStateClick, selectedState }:
           variant="outline"
           size="icon"
           onClick={handleReset}
-          className="bg-card/90 backdrop-blur-sm shadow-lg border-border hover:bg-accent"
+          className="bg-white/90 backdrop-blur-sm shadow-lg border-gray-300 hover:bg-gray-100"
         >
           <RotateCcw className="h-4 w-4" />
         </Button>
       </div>
 
       {/* Zoom Level Indicator */}
-      <div className="absolute top-4 left-4 z-20 bg-card/90 backdrop-blur-sm rounded-lg px-3 py-1.5 text-sm font-medium border border-border shadow-lg">
+      <div className="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1.5 text-sm font-medium border border-gray-300 shadow-lg text-gray-700">
         Zoom: {Math.round(zoom * 100)}%
       </div>
 
       {/* Tooltip */}
       {hoveredState && (
         <div
-          className="fixed z-50 px-4 py-3 rounded-lg bg-card shadow-elevated border border-border pointer-events-none"
+          className="fixed z-50 px-4 py-3 rounded-lg bg-white shadow-xl border border-gray-200 pointer-events-none"
           style={{
             left: tooltipPosition.x + 15,
             top: tooltipPosition.y - 10,
           }}
         >
-          <div className="font-semibold text-foreground">
-            {getStateDataById(hoveredState)?.name}
+          <div className="font-bold text-gray-900 text-lg">
+            {getStateDataById(hoveredState)?.name?.replace(/\n/g, " ")}
           </div>
           <div className="flex items-center gap-2 mt-1">
             <span
-              className="w-3 h-3 rounded-full border border-gray-400"
-              style={{ backgroundColor: getImpactColor(hoveredState) }}
+              className="w-4 h-4 rounded border border-gray-400"
+              style={{ backgroundColor: getStateColor(hoveredState) }}
             />
-            <span className="text-sm text-muted-foreground">
-              Impact Score: {(getStateDataById(hoveredState) as StateData)?.score || "N/A"}%
+            <span className="text-sm text-gray-600">
+              Impact Score: {stateData.find(s => s.id === hoveredState)?.score || "N/A"}
             </span>
           </div>
         </div>
@@ -507,247 +466,160 @@ const IndiaMap = ({ stateData = defaultStateData, onStateClick, selectedState }:
 
       {/* Map Container */}
       <div
-        className="overflow-hidden rounded-xl border-2 border-border bg-gradient-to-b from-sky-200 to-sky-300 cursor-grab active:cursor-grabbing"
+        className="relative overflow-hidden rounded-xl bg-sky-100 cursor-grab active:cursor-grabbing"
         style={{ height: "600px" }}
         onMouseDown={handleMouseDown}
       >
         <svg
-          viewBox="0 0 650 820"
+          viewBox="0 0 700 1020"
           className="w-full h-full"
-          onMouseMove={handleMouseMove}
           style={{
             transform: `scale(${zoom}) translate(${pan.x / zoom}px, ${pan.y / zoom}px)`,
             transformOrigin: "center center",
             transition: isPanning ? "none" : "transform 0.2s ease-out",
           }}
+          onMouseMove={handleMouseMove}
         >
-          {/* Water/Ocean Background */}
-          <rect x="0" y="0" width="650" height="820" fill="url(#oceanGradient)" />
-          
+          {/* Water body background effect */}
           <defs>
-            <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <linearGradient id="waterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#87CEEB" />
-              <stop offset="100%" stopColor="#00BFFF" />
+              <stop offset="100%" stopColor="#B0E0E6" />
             </linearGradient>
-            <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="2" dy="2" stdDeviation="3" floodOpacity="0.3" />
-            </filter>
           </defs>
 
-          {/* Water Body Labels */}
-          <text x="35" y="450" className="fill-blue-800 font-bold text-sm" style={{ fontSize: "14px" }}>
-            ARABIAN
-          </text>
-          <text x="45" y="470" className="fill-blue-800 font-bold text-sm" style={{ fontSize: "14px" }}>
-            SEA
-          </text>
-          <text x="420" y="480" className="fill-blue-800 font-bold text-sm" style={{ fontSize: "14px" }}>
-            BAY OF
-          </text>
-          <text x="420" y="500" className="fill-blue-800 font-bold text-sm" style={{ fontSize: "14px" }}>
-            BENGAL
-          </text>
-          <text x="280" y="800" className="fill-blue-800 font-bold text-sm" style={{ fontSize: "14px" }}>
-            INDIAN OCEAN
+          {/* Bay of Bengal label */}
+          <text
+            x="520"
+            y="650"
+            fill="#4682B4"
+            fontSize="18"
+            fontWeight="500"
+            fontStyle="italic"
+            opacity="0.8"
+          >
+            Bay of Bengal
           </text>
 
-          {/* Neighboring Countries */}
-          <text x="15" y="100" className="fill-gray-600 font-semibold" style={{ fontSize: "11px" }}>
+          {/* Arabian Sea label */}
+          <text
+            x="20"
+            y="700"
+            fill="#4682B4"
+            fontSize="18"
+            fontWeight="500"
+            fontStyle="italic"
+            opacity="0.8"
+          >
+            Arabian Sea
+          </text>
+
+          {/* Indian Ocean label */}
+          <text
+            x="280"
+            y="990"
+            fill="#4682B4"
+            fontSize="16"
+            fontWeight="500"
+            fontStyle="italic"
+            opacity="0.8"
+          >
+            Indian Ocean
+          </text>
+
+          {/* Neighboring countries */}
+          <text x="100" y="30" fill="#666" fontSize="14" fontWeight="600">
             PAKISTAN
           </text>
-          <text x="15" y="45" className="fill-gray-600 font-semibold" style={{ fontSize: "10px" }}>
-            AFGHANISTAN
-          </text>
-          <text x="340" y="100" className="fill-gray-600 font-semibold" style={{ fontSize: "11px" }}>
+          <text x="350" y="25" fill="#666" fontSize="14" fontWeight="600">
             CHINA
           </text>
-          <text x="390" y="130" className="fill-gray-600 font-semibold" style={{ fontSize: "10px" }}>
-            TIBET
-          </text>
-          <text x="410" y="195" className="fill-gray-600 font-semibold" style={{ fontSize: "10px" }}>
-            NEPAL
-          </text>
-          <text x="475" y="220" className="fill-gray-600 font-semibold" style={{ fontSize: "10px" }}>
-            BHUTAN
-          </text>
-          <text x="510" y="345" className="fill-gray-600 font-semibold" style={{ fontSize: "10px" }}>
-            BANGLADESH
-          </text>
-          <text x="560" y="410" className="fill-gray-600 font-semibold" style={{ fontSize: "10px" }}>
+          <text x="630" y="280" fill="#666" fontSize="12" fontWeight="600">
             MYANMAR
           </text>
-          <text x="240" y="790" className="fill-gray-600 font-semibold" style={{ fontSize: "10px" }}>
+          <text x="500" y="540" fill="#666" fontSize="12" fontWeight="600">
+            BANGLADESH
+          </text>
+          <text x="268" y="145" fill="#666" fontSize="12" fontWeight="600">
+            NEPAL
+          </text>
+          <text x="490" y="285" fill="#666" fontSize="10" fontWeight="600">
+            BHUTAN
+          </text>
+          <text x="165" y="1000" fill="#666" fontSize="12" fontWeight="600">
             SRI LANKA
           </text>
 
-          {/* Title */}
-          <text x="520" y="50" className="fill-foreground font-bold" style={{ fontSize: "12px" }}>
-            Map of
-          </text>
-          <text x="520" y="75" className="fill-primary font-black" style={{ fontSize: "24px" }}>
-            INDIA
-          </text>
-
-          {/* India States */}
-          <g filter="url(#dropShadow)">
+          {/* States */}
+          <g>
             {statesData.map((state) => (
               <g key={state.id}>
+                {/* State shape */}
                 <path
                   d={state.path}
-                  fill={getImpactColor(state.id)}
-                  stroke="#2c3e50"
-                  strokeWidth={selectedState === state.id ? 3 : 1.5}
-                  className={`transition-all duration-200 ${
-                    hoveredState === state.id ? "brightness-110" : ""
-                  } ${selectedState === state.id ? "brightness-125" : ""}`}
-                  style={{ cursor: "pointer" }}
+                  fill={getStateColor(state.id)}
+                  stroke="#2c2c2c"
+                  strokeWidth="1.5"
+                  className="cursor-pointer transition-all duration-200"
+                  style={{
+                    filter: hoveredState === state.id ? "brightness(1.15)" : 
+                            selectedState === state.id ? "brightness(0.9)" : "none",
+                    transform: hoveredState === state.id ? "scale(1.02)" : "scale(1)",
+                    transformOrigin: `${state.labelX}px ${state.labelY}px`,
+                  }}
                   onMouseEnter={() => setHoveredState(state.id)}
                   onMouseLeave={() => setHoveredState(null)}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onStateClick?.(state.id);
-                  }}
+                  onClick={() => onStateClick?.(state.id)}
                 />
+                
+                {/* State name label */}
+                <text
+                  x={state.labelX}
+                  y={state.labelY}
+                  textAnchor="middle"
+                  fontSize={state.id === "DL" || state.id === "GA" || state.id === "SK" ? "6" : 
+                           state.id === "LD" || state.id === "PY" ? "7" : "9"}
+                  fontWeight="700"
+                  fill="#1a1a1a"
+                  className="pointer-events-none select-none"
+                  style={{
+                    textShadow: "0px 0px 3px white, 0px 0px 3px white, 0px 0px 3px white",
+                  }}
+                >
+                  {state.name.split('\n').map((line, i) => (
+                    <tspan
+                      key={i}
+                      x={state.labelX}
+                      dy={i === 0 ? 0 : "1.1em"}
+                    >
+                      {line}
+                    </tspan>
+                  ))}
+                </text>
               </g>
             ))}
           </g>
 
-          {/* State Labels */}
-          {statesData.map((state) => {
-            // Shorter names for small states
-            const shortNames: Record<string, string> = {
-              JK: "J&K",
-              HP: "HP",
-              PB: "Punjab",
-              HR: "Haryana",
-              UK: "U'khand",
-              DL: "DL",
-              RJ: "Rajasthan",
-              UP: "Uttar Pradesh",
-              BR: "Bihar",
-              SK: "SK",
-              AS: "Assam",
-              AR: "Arunachal",
-              NL: "NL",
-              MN: "MN",
-              MZ: "MZ",
-              TR: "TR",
-              ML: "Meghalaya",
-              WB: "W.Bengal",
-              JH: "Jharkhand",
-              OR: "Odisha",
-              CT: "Chhattisgarh",
-              MP: "Madhya Pradesh",
-              GJ: "Gujarat",
-              MH: "Maharashtra",
-              GA: "Goa",
-              KA: "Karnataka",
-              TG: "Telangana",
-              AP: "Andhra Pradesh",
-              TN: "Tamil Nadu",
-              KL: "Kerala",
-              LA: "Ladakh",
-              AN: "A&N",
-              LD: "LD",
-            };
-
-            const displayName = shortNames[state.id] || state.name;
-            const fontSize = ["DL", "SK", "GA", "NL", "MN", "MZ", "TR", "LD"].includes(state.id) ? 6 : 8;
-
-            return (
-              <text
-                key={`label-${state.id}`}
-                x={state.labelX}
-                y={state.labelY}
-                textAnchor="middle"
-                className="pointer-events-none font-bold fill-gray-900"
-                style={{
-                  fontSize: `${fontSize}px`,
-                  textShadow: "0 0 3px white, 0 0 3px white",
-                }}
-              >
-                {displayName}
-              </text>
-            );
-          })}
-
-          {/* Capital dots for major cities */}
-          <circle cx="218" cy="196" r="3" fill="#000" /> {/* Delhi */}
-          <circle cx="95" cy="400" r="2" fill="#000" /> {/* Gandhinagar */}
-          <circle cx="165" cy="128" r="2" fill="#000" /> {/* Chandigarh */}
-          <circle cx="195" cy="495" r="2" fill="#000" /> {/* Mumbai */}
-          <circle cx="210" cy="608" r="2" fill="#000" /> {/* Bengaluru */}
-          <circle cx="305" cy="508" r="2" fill="#000" /> {/* Hyderabad */}
-          <circle cx="285" cy="720" r="2" fill="#000" /> {/* Chennai */}
-          <circle cx="275" cy="270" r="2" fill="#000" /> {/* Lucknow */}
-          <circle cx="410" cy="305" r="2" fill="#000" /> {/* Patna */}
-          <circle cx="465" cy="395" r="2" fill="#000" /> {/* Kolkata */}
-
-          {/* City Labels */}
-          <text x="228" y="200" className="pointer-events-none fill-gray-800" style={{ fontSize: "6px" }}>
-            New Delhi
-          </text>
-          <text x="105" y="405" className="pointer-events-none fill-gray-800" style={{ fontSize: "5px" }}>
-            Gandhinagar
-          </text>
-          <text x="170" y="133" className="pointer-events-none fill-gray-800" style={{ fontSize: "5px" }}>
-            Chandigarh
-          </text>
-          <text x="205" y="500" className="pointer-events-none fill-gray-800" style={{ fontSize: "5px" }}>
-            Mumbai
-          </text>
-          <text x="220" y="612" className="pointer-events-none fill-gray-800" style={{ fontSize: "5px" }}>
-            Bengaluru
-          </text>
-          <text x="315" y="512" className="pointer-events-none fill-gray-800" style={{ fontSize: "5px" }}>
-            Hyderabad
-          </text>
-          <text x="295" y="725" className="pointer-events-none fill-gray-800" style={{ fontSize: "5px" }}>
-            Chennai
-          </text>
-          <text x="285" y="275" className="pointer-events-none fill-gray-800" style={{ fontSize: "5px" }}>
-            Lucknow
-          </text>
-          <text x="420" y="310" className="pointer-events-none fill-gray-800" style={{ fontSize: "5px" }}>
-            Patna
-          </text>
-          <text x="475" y="400" className="pointer-events-none fill-gray-800" style={{ fontSize: "5px" }}>
-            Kolkata
-          </text>
+          {/* Capital Cities Markers */}
+          <g>
+            {/* New Delhi */}
+            <circle cx="228" cy="245" r="4" fill="#FF0000" stroke="#000" strokeWidth="1" />
+            <text x="228" y="260" textAnchor="middle" fontSize="7" fontWeight="600" fill="#333">
+              New Delhi ★
+            </text>
+          </g>
         </svg>
       </div>
 
-      {/* Legend */}
-      <div className="flex flex-wrap justify-center gap-4 mt-6 p-4 bg-card/80 backdrop-blur-sm rounded-xl border border-border">
-        <div className="text-sm font-semibold text-foreground mr-4">State Impact Colors:</div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded border border-gray-400" style={{ backgroundColor: "#4CAF50" }} />
-          <span className="text-sm text-muted-foreground">Green</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded border border-gray-400" style={{ backgroundColor: "#FFEB3B" }} />
-          <span className="text-sm text-muted-foreground">Yellow</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded border border-gray-400" style={{ backgroundColor: "#FF9800" }} />
-          <span className="text-sm text-muted-foreground">Orange</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded border border-gray-400" style={{ backgroundColor: "#F44336" }} />
-          <span className="text-sm text-muted-foreground">Red</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded border border-gray-400" style={{ backgroundColor: "#E91E63" }} />
-          <span className="text-sm text-muted-foreground">Pink</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded border border-gray-400" style={{ backgroundColor: "#9C27B0" }} />
-          <span className="text-sm text-muted-foreground">Purple</span>
-        </div>
+      {/* Map Title */}
+      <div className="text-center mt-4">
+        <h3 className="text-xl font-bold text-gray-800">INDIA - Political Map</h3>
+        <p className="text-sm text-gray-500 mt-1">States and Union Territories</p>
       </div>
 
-      <div className="text-center mt-3 text-xs text-muted-foreground">
-        🖱️ Scroll to zoom • Drag to pan • Click states for details
+      {/* Instructions */}
+      <div className="absolute bottom-20 left-4 z-20 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 text-xs text-gray-600 border border-gray-200 shadow">
+        <p>🖱️ Scroll to zoom • Drag to pan • Click state for details</p>
       </div>
     </div>
   );
