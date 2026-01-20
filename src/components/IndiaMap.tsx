@@ -550,16 +550,27 @@ const IndiaMap = ({ stateData = defaultStateData, onStateClick, selectedState }:
             SRI LANKA
           </text>
 
-          {/* States */}
+          {/* India Outline Border - drawn first as background */}
+          <path
+            d={statesData.map(s => s.path).join(' ')}
+            fill="none"
+            stroke="#1a1a1a"
+            strokeWidth="4"
+            strokeLinejoin="round"
+            className="pointer-events-none"
+          />
+
+          {/* States with prominent borders */}
           <g>
             {statesData.map((state) => (
               <g key={state.id}>
-                {/* State shape */}
+                {/* State shape with thick border */}
                 <path
                   d={state.path}
                   fill={getStateColor(state.id)}
-                  stroke="#2c2c2c"
-                  strokeWidth="1.5"
+                  stroke="#1a1a1a"
+                  strokeWidth="2.5"
+                  strokeLinejoin="round"
                   className="cursor-pointer transition-all duration-200"
                   style={{
                     filter: hoveredState === state.id ? "brightness(1.15)" : 
@@ -600,11 +611,22 @@ const IndiaMap = ({ stateData = defaultStateData, onStateClick, selectedState }:
             ))}
           </g>
 
+          {/* India Country Outline - thick outer border */}
+          <path
+            d="M165,45 L185,35 L205,40 L225,35 L245,50 L280,40 L320,55 L340,80 L335,115 L305,130 L275,120 L260,95 L260,75 L260,105 L240,125 L265,140 L310,178 L322,208 L355,258 L398,305 L445,320 L485,335 L512,308 L548,308 L595,318 L658,262 L665,305 L662,365 L662,422 L638,450 L628,492 L590,478 L568,465 L540,535 L515,555 L478,550 L440,525 L425,650 L448,722 L430,788 L398,908 L362,958 L298,972 L210,985 L165,892 L142,765 L145,718 L140,702 L110,578 L78,590 L12,498 L18,445 L38,405 L48,295 L70,250 L118,225 L135,135 L130,70 L145,55 Z"
+            fill="none"
+            stroke="#000000"
+            strokeWidth="5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            className="pointer-events-none"
+          />
+
           {/* Capital Cities Markers */}
           <g>
             {/* New Delhi */}
-            <circle cx="228" cy="245" r="4" fill="#FF0000" stroke="#000" strokeWidth="1" />
-            <text x="228" y="260" textAnchor="middle" fontSize="7" fontWeight="600" fill="#333">
+            <circle cx="228" cy="245" r="5" fill="#FF0000" stroke="#000" strokeWidth="2" />
+            <text x="228" y="262" textAnchor="middle" fontSize="8" fontWeight="700" fill="#000">
               New Delhi ★
             </text>
           </g>
