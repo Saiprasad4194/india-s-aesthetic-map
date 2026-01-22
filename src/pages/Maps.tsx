@@ -1,68 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AlertTriangle, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import IndiaMap from "@/components/IndiaMap";
 import { getAnalysisData, type AnalysisData } from "@/lib/analysisStore";
+import indiaMap from "@/assets/india-political-map.gif";
 
 const Maps = () => {
   const [data, setData] = useState<AnalysisData | null>(null);
-  const [selectedState, setSelectedState] = useState<string | null>(null);
 
   useEffect(() => {
     setData(getAnalysisData());
   }, []);
 
   // Show map even without running analysis (for demo purposes)
-  // Only hide map if user explicitly ran analysis WITHOUT the geo module
   const shouldShowMap = !data || data.modules.modGeo;
-
-  const handleStateClick = (stateId: string) => {
-    setSelectedState(selectedState === stateId ? null : stateId);
-  };
-
-  const stateDetails: Record<string, { name: string; districts: string[]; readiness: string; recommendation: string }> = {
-    JK: {
-      name: "Jammu & Kashmir",
-      districts: ["Srinagar", "Jammu", "Anantnag", "Baramulla"],
-      readiness: "Medium",
-      recommendation: "Extended compliance window recommended due to geographic challenges",
-    },
-    GJ: {
-      name: "Gujarat",
-      districts: ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-      readiness: "High",
-      recommendation: "Strong MSE ecosystem - early adoption likely",
-    },
-    MH: {
-      name: "Maharashtra",
-      districts: ["Mumbai", "Pune", "Nagpur", "Nashik"],
-      readiness: "High",
-      recommendation: "Existing GST compliance culture favorable for adoption",
-    },
-    KA: {
-      name: "Karnataka",
-      districts: ["Bengaluru", "Mysuru", "Hubli", "Mangalore"],
-      readiness: "High",
-      recommendation: "Tech industry presence accelerates digital compliance",
-    },
-    UP: {
-      name: "Uttar Pradesh",
-      districts: ["Lucknow", "Kanpur", "Varanasi", "Agra"],
-      readiness: "Medium-Low",
-      recommendation: "Consider vernacular support and additional handholding",
-    },
-    BR: {
-      name: "Bihar",
-      districts: ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur"],
-      readiness: "Low",
-      recommendation: "Full 18-month compliance window essential",
-    },
-  };
-
-  const selectedDetails = selectedState ? stateDetails[selectedState] : null;
 
   if (!shouldShowMap) {
     return (
@@ -98,7 +51,7 @@ const Maps = () => {
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-foreground">Impact Maps</h1>
           <p className="text-muted-foreground">
-            Interactive maps showing state-wise and district-wise impact analysis
+            India Political Map - States and Union Territories
           </p>
         </div>
 
@@ -108,16 +61,18 @@ const Maps = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-secondary" />
-                State-wise Impact Map
+                India - States and Union Territories
               </CardTitle>
               <CardDescription>
-                Click on any state to view detailed impact analysis
+                Political map showing all states and union territories of India
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <IndiaMap
-                onStateClick={handleStateClick}
-                selectedState={selectedState}
+            <CardContent className="flex justify-center">
+              <img 
+                src={indiaMap} 
+                alt="India Political Map - States and Union Territories" 
+                className="max-w-full h-auto rounded-lg border border-border"
+                style={{ maxHeight: "700px" }}
               />
             </CardContent>
           </Card>
@@ -126,83 +81,80 @@ const Maps = () => {
           <div className="space-y-4 animate-slide-up">
             <Card className="shadow-soft">
               <CardHeader>
-                <CardTitle className="text-lg">State Details</CardTitle>
+                <CardTitle className="text-lg">Map Legend</CardTitle>
               </CardHeader>
-              <CardContent>
-                {selectedDetails ? (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-semibold text-lg text-foreground">
-                        {selectedDetails.name}
-                      </h3>
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                        Key Districts
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedDetails.districts.map((district) => (
-                          <span
-                            key={district}
-                            className="px-2 py-1 bg-muted rounded text-xs"
-                          >
-                            {district}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="text-sm font-medium text-muted-foreground mb-1">
-                        Digital Readiness
-                      </h4>
-                      <span className={`
-                        px-3 py-1 rounded-full text-xs font-medium
-                        ${selectedDetails.readiness === "High" 
-                          ? "bg-success/20 text-success" 
-                          : selectedDetails.readiness === "Medium" || selectedDetails.readiness === "Medium-Low"
-                          ? "bg-warning/20 text-warning"
-                          : "bg-destructive/20 text-destructive"
-                        }
-                      `}>
-                        {selectedDetails.readiness}
-                      </span>
-                    </div>
-
-                    <div>
-                      <h4 className="text-sm font-medium text-muted-foreground mb-1">
-                        AI Recommendation
-                      </h4>
-                      <p className="text-sm text-foreground">
-                        {selectedDetails.recommendation}
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground text-center py-8">
-                    Click on a state in the map to view details
-                  </p>
-                )}
+              <CardContent className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-0.5 bg-blue-600"></div>
+                  <span className="text-sm text-muted-foreground">International Boundary</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-0.5 bg-gray-400"></div>
+                  <span className="text-sm text-muted-foreground">State/UT Boundary</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 border-2 border-red-500 bg-white"></div>
+                  <span className="text-sm text-muted-foreground">Country Capital</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-black"></div>
+                  <span className="text-sm text-muted-foreground">State/UT Capital</span>
+                </div>
               </CardContent>
             </Card>
 
             <Card className="shadow-soft">
               <CardHeader>
-                <CardTitle className="text-lg">Impact Summary</CardTitle>
+                <CardTitle className="text-lg">Quick Stats</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">High Readiness</span>
-                  <span className="font-semibold text-success">12 states</span>
+                  <span className="text-sm text-muted-foreground">Total States</span>
+                  <span className="font-semibold text-foreground">28</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Medium Readiness</span>
-                  <span className="font-semibold text-warning">11 states</span>
+                  <span className="text-sm text-muted-foreground">Union Territories</span>
+                  <span className="font-semibold text-foreground">8</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Need Support</span>
-                  <span className="font-semibold text-destructive">8 states</span>
+                  <span className="text-sm text-muted-foreground">National Capital</span>
+                  <span className="font-semibold text-foreground">New Delhi</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-soft">
+              <CardHeader>
+                <CardTitle className="text-lg">Neighboring Countries</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {["Pakistan", "China", "Nepal", "Bhutan", "Bangladesh", "Myanmar", "Sri Lanka"].map((country) => (
+                    <span
+                      key={country}
+                      className="px-2 py-1 bg-muted rounded text-xs"
+                    >
+                      {country}
+                    </span>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="shadow-soft">
+              <CardHeader>
+                <CardTitle className="text-lg">Water Bodies</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {["Arabian Sea", "Bay of Bengal", "Indian Ocean"].map((water) => (
+                    <span
+                      key={water}
+                      className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                    >
+                      {water}
+                    </span>
+                  ))}
                 </div>
               </CardContent>
             </Card>
