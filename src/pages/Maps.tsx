@@ -54,6 +54,46 @@ const stateImpactData: Record<string, {
   "Daman & Diu": { name: "Daman & Diu", impact: "positive", positivePercent: 65, neutralPercent: 25, riskPercent: 10, keyInsight: "Manufacturing sector benefits" },
 };
 
+// State positions on map (percentage-based for responsiveness)
+const statePositions: Record<string, { top: string; left: string }> = {
+  "Jammu & Kashmir": { top: "12%", left: "28%" },
+  "Ladakh": { top: "10%", left: "38%" },
+  "Himachal Pradesh": { top: "20%", left: "32%" },
+  "Punjab": { top: "22%", left: "26%" },
+  "Uttarakhand": { top: "24%", left: "40%" },
+  "Haryana": { top: "28%", left: "30%" },
+  "Delhi": { top: "30%", left: "34%" },
+  "Rajasthan": { top: "38%", left: "22%" },
+  "Uttar Pradesh": { top: "35%", left: "45%" },
+  "Bihar": { top: "38%", left: "58%" },
+  "Sikkim": { top: "32%", left: "68%" },
+  "Arunachal Pradesh": { top: "28%", left: "82%" },
+  "Nagaland": { top: "35%", left: "85%" },
+  "Manipur": { top: "40%", left: "84%" },
+  "Mizoram": { top: "48%", left: "82%" },
+  "Tripura": { top: "45%", left: "78%" },
+  "Meghalaya": { top: "38%", left: "75%" },
+  "Assam": { top: "34%", left: "76%" },
+  "West Bengal": { top: "45%", left: "65%" },
+  "Jharkhand": { top: "42%", left: "58%" },
+  "Odisha": { top: "52%", left: "56%" },
+  "Chhattisgarh": { top: "48%", left: "48%" },
+  "Madhya Pradesh": { top: "42%", left: "38%" },
+  "Gujarat": { top: "48%", left: "20%" },
+  "Maharashtra": { top: "55%", left: "32%" },
+  "Goa": { top: "65%", left: "26%" },
+  "Karnataka": { top: "68%", left: "32%" },
+  "Kerala": { top: "80%", left: "34%" },
+  "Tamil Nadu": { top: "78%", left: "42%" },
+  "Andhra Pradesh": { top: "62%", left: "44%" },
+  "Telangana": { top: "56%", left: "40%" },
+  "Puducherry": { top: "75%", left: "46%" },
+  "Andaman & Nicobar": { top: "72%", left: "78%" },
+  "Lakshadweep": { top: "78%", left: "18%" },
+  "Dadra & Nagar Haveli": { top: "52%", left: "24%" },
+  "Daman & Diu": { top: "50%", left: "18%" },
+};
+
 const Maps = () => {
   const [data, setData] = useState<AnalysisData | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
@@ -71,6 +111,14 @@ const Maps = () => {
   const riskStates = Object.values(stateImpactData).filter(s => s.impact === "risk").length;
 
   const selectedImpact = selectedState ? stateImpactData[selectedState] : null;
+
+  const getImpactColor = (impact: "positive" | "neutral" | "risk") => {
+    switch (impact) {
+      case "positive": return "bg-emerald-500";
+      case "neutral": return "bg-amber-500";
+      case "risk": return "bg-red-500";
+    }
+  };
 
   if (!shouldShowMap) {
     return (
@@ -136,7 +184,7 @@ const Maps = () => {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Map */}
+          {/* Map with Impact Circles */}
           <Card className="lg:col-span-2 shadow-soft animate-fade-in">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -144,16 +192,38 @@ const Maps = () => {
                 India - Impact Analysis Map
               </CardTitle>
               <CardDescription>
-                Click on a state in the list to view detailed impact analysis
+                Click on circles or select from the list to view detailed impact analysis
               </CardDescription>
             </CardHeader>
             <CardContent className="flex justify-center">
-              <img 
-                src={indiaMap} 
-                alt="India Political Map - States and Union Territories" 
-                className="max-w-full h-auto rounded-lg border border-border"
-                style={{ maxHeight: "600px" }}
-              />
+              <div className="relative inline-block">
+                <img 
+                  src={indiaMap} 
+                  alt="India Political Map - States and Union Territories" 
+                  className="max-w-full h-auto rounded-lg border border-border"
+                  style={{ maxHeight: "600px" }}
+                />
+                {/* Impact circles overlay */}
+                {Object.entries(stateImpactData).map(([key, state]) => {
+                  const position = statePositions[key];
+                  if (!position) return null;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setSelectedState(key)}
+                      className={`absolute w-4 h-4 rounded-full ${getImpactColor(state.impact)} 
+                        border-2 border-white shadow-md cursor-pointer transition-transform hover:scale-150 
+                        ${selectedState === key ? "ring-2 ring-primary ring-offset-1 scale-150" : ""}`}
+                      style={{ 
+                        top: position.top, 
+                        left: position.left,
+                        transform: "translate(-50%, -50%)"
+                      }}
+                      title={state.name}
+                    />
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
 
