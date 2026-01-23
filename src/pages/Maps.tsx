@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getAnalysisData, type AnalysisData } from "@/lib/analysisStore";
-import indiaMap from "@/assets/india-political-map.gif";
+import indiaMap from "@/assets/india-states-map.png";
 
 // Impact data for each state
 const stateImpactData: Record<string, {
