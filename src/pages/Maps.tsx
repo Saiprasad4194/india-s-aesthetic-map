@@ -82,12 +82,12 @@ const statePositions: Record<string, { top: string; left: string }> = {
   "Gujarat": { top: "48%", left: "20%" },
   "Maharashtra": { top: "55%", left: "32%" },
   "Goa": { top: "65%", left: "26%" },
-  "Karnataka": { top: "72%", left: "35%" },
-  "Kerala": { top: "80%", left: "32%" },
-  "Tamil Nadu": { top: "78%", left: "40%" },
-  "Andhra Pradesh": { top: "64%", left: "42%" },
+  "Karnataka": { top: "74%", left: "34%" },
+  "Kerala": { top: "88%", left: "30%" },
+  "Tamil Nadu": { top: "88%", left: "41%" },
+  "Andhra Pradesh": { top: "72%", left: "45%" },
   "Telangana": { top: "60%", left: "38%" },
-  "Puducherry": { top: "76%", left: "44%" },
+  "Puducherry": { top: "85%", left: "44%" },
   "Andaman & Nicobar": { top: "72%", left: "78%" },
   "Lakshadweep": { top: "78%", left: "18%" },
   "Dadra & Nagar Haveli": { top: "52%", left: "24%" },
@@ -211,7 +211,7 @@ const Maps = () => {
                     <button
                       key={key}
                       onClick={() => setSelectedState(key)}
-                      className={`absolute w-4 h-4 rounded-full ${getImpactColor(state.impact)} 
+                      className={`absolute z-10 w-4 h-4 rounded-full ${getImpactColor(state.impact)} 
                         border-2 border-white shadow-md cursor-pointer transition-transform hover:scale-150 
                         ${selectedState === key ? "ring-2 ring-primary ring-offset-1 scale-150" : ""}`}
                       style={{ 
