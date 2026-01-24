@@ -47,6 +47,12 @@ const Header = () => {
               </div>
             </div>
 
+            {/* Badge */}
+            <div className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs text-white/90 flex items-center gap-2">
+              <span>⚖️</span>
+              <span className="hidden sm:inline">Academic Prototype</span>
+              <span className="sm:hidden">Demo</span>
+            </div>
           </div>
 
           {/* Navigation */}
