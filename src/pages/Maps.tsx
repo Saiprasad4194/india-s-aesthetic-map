@@ -51,6 +51,8 @@ const stateImpactData: Record<string, {
   "Lakshadweep": { name: "Lakshadweep", impact: "neutral", positivePercent: 40, neutralPercent: 45, riskPercent: 15, keyInsight: "Tourism potential being developed" },
   "Dadra & Nagar Haveli": { name: "Dadra & Nagar Haveli", impact: "positive", positivePercent: 68, neutralPercent: 22, riskPercent: 10, keyInsight: "Industrial zone shows growth" },
   "Daman & Diu": { name: "Daman & Diu", impact: "positive", positivePercent: 65, neutralPercent: 25, riskPercent: 10, keyInsight: "Manufacturing sector benefits" },
+  "Puducherry": { name: "Puducherry", impact: "positive", positivePercent: 65, neutralPercent: 25, riskPercent: 10, keyInsight: "Tourism and education sectors stable" },
+  "Chandigarh": { name: "Chandigarh", impact: "positive", positivePercent: 75, neutralPercent: 18, riskPercent: 7, keyInsight: "Well-planned city with strong governance" },
 };
 
 // State positions on map (percentage-based for responsiveness)
@@ -83,14 +85,25 @@ const statePositions: Record<string, { top: string; left: string }> = {
   "Goa": { top: "72%", left: "24%" },
   "Karnataka": { top: "80%", left: "35%" },
   "Kerala": { top: "88%", left: "30%" },
-  "Tamil Nadu": { top: "88%", left: "41%" },
+  "Tamil Nadu": { top: "88%", left: "38%" },
   "Andhra Pradesh": { top: "72%", left: "45%" },
   "Telangana": { top: "60%", left: "38%" },
   "Andaman & Nicobar": { top: "72%", left: "78%" },
   "Lakshadweep": { top: "85%", left: "18%" },
   "Dadra & Nagar Haveli": { top: "56%", left: "24%" },
   "Daman & Diu": { top: "54%", left: "18%" },
+  "Puducherry": { top: "82%", left: "44%" },
+  "Chandigarh": { top: "24%", left: "28%" },
 };
+
+// List of Union Territories
+const unionTerritories = [
+  "Jammu & Kashmir", "Ladakh", "Delhi", "Chandigarh", "Puducherry", 
+  "Andaman & Nicobar", "Lakshadweep", "Dadra & Nagar Haveli", "Daman & Diu"
+];
+
+// List of States (excluding UTs)
+const states = Object.keys(stateImpactData).filter(key => !unionTerritories.includes(key));
 
 const Maps = () => {
   const [data, setData] = useState<AnalysisData | null>(null);
@@ -255,23 +268,58 @@ const Maps = () => {
               </CardHeader>
               <CardContent className="max-h-[200px] overflow-y-auto">
                 <div className="space-y-1">
-                  {Object.entries(stateImpactData).map(([key, state]) => (
-                    <button
-                      key={key}
-                      onClick={() => setSelectedState(key)}
-                      className={`w-full text-left px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${
-                        selectedState === key 
-                          ? "bg-primary text-primary-foreground" 
-                          : "hover:bg-muted"
-                      }`}
-                    >
-                      <div className={`w-3 h-3 rounded-full ${
-                        state.impact === "positive" ? "bg-emerald-500" :
-                        state.impact === "neutral" ? "bg-amber-500" : "bg-red-500"
-                      }`}></div>
-                      {state.name}
-                    </button>
-                  ))}
+                  {states.map((key) => {
+                    const state = stateImpactData[key];
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => setSelectedState(key)}
+                        className={`w-full text-left px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${
+                          selectedState === key 
+                            ? "bg-primary text-primary-foreground" 
+                            : "hover:bg-muted"
+                        }`}
+                      >
+                        <div className={`w-3 h-3 rounded-full ${
+                          state.impact === "positive" ? "bg-emerald-500" :
+                          state.impact === "neutral" ? "bg-amber-500" : "bg-red-500"
+                        }`}></div>
+                        {state.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Union Territory Selector */}
+            <Card className="shadow-soft">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Select Union Territory</CardTitle>
+              </CardHeader>
+              <CardContent className="max-h-[200px] overflow-y-auto">
+                <div className="space-y-1">
+                  {unionTerritories.map((key) => {
+                    const ut = stateImpactData[key];
+                    if (!ut) return null;
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => setSelectedState(key)}
+                        className={`w-full text-left px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${
+                          selectedState === key 
+                            ? "bg-primary text-primary-foreground" 
+                            : "hover:bg-muted"
+                        }`}
+                      >
+                        <div className={`w-3 h-3 rounded-full ${
+                          ut.impact === "positive" ? "bg-emerald-500" :
+                          ut.impact === "neutral" ? "bg-amber-500" : "bg-red-500"
+                        }`}></div>
+                        {ut.name}
+                      </button>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
