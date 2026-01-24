@@ -47,17 +47,6 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Badges */}
-            <div className="flex items-center gap-3 flex-wrap">
-              <div className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs text-white/90 flex items-center gap-2">
-                <span>⚖️</span>
-                <span className="hidden sm:inline">Academic Prototype</span>
-                <span className="sm:hidden">Demo</span>
-              </div>
-              <div className="px-3 py-1.5 rounded-full bg-secondary/20 border border-secondary/40 text-xs text-secondary font-medium">
-                Mock AI Demo
-              </div>
-            </div>
           </div>
 
           {/* Navigation */}

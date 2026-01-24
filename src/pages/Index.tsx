@@ -363,7 +363,7 @@ const Index = () => {
                   </Button>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                    Mock AI ready – no data leaves this browser
+                    AI Analysis Ready
                   </div>
                 </div>
               </CardContent>
