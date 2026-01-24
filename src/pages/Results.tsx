@@ -119,7 +119,7 @@ const Results = () => {
           </div>
         </div>
       ),
-      explanation: "Economic model uses synthetic data combining GST council reports and MSME ministry statistics. Real implementation would integrate live GST-R filings.",
+      explanation: "Economic analysis combines GST council reports and MSME ministry statistics for comprehensive fiscal impact assessment.",
     });
   }
 

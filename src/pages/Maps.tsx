@@ -80,7 +80,7 @@ const statePositions: Record<string, { top: string; left: string }> = {
   "Madhya Pradesh": { top: "42%", left: "38%" },
   "Gujarat": { top: "48%", left: "20%" },
   "Maharashtra": { top: "55%", left: "32%" },
-  "Goa": { top: "68%", left: "24%" },
+  "Goa": { top: "72%", left: "24%" },
   "Karnataka": { top: "80%", left: "35%" },
   "Kerala": { top: "88%", left: "30%" },
   "Tamil Nadu": { top: "88%", left: "41%" },
