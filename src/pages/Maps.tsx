@@ -395,30 +395,98 @@ const Maps = () => {
               </Card>
             )}
 
-            {/* Quick Stats */}
-            <Card className="shadow-soft">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Analysis Summary</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Total Regions Analyzed</span>
-                  <span className="font-semibold">{Object.keys(stateImpactData).length}</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Average Positive Impact</span>
-                  <span className="font-semibold text-emerald-600">
-                    {Math.round(Object.values(stateImpactData).reduce((acc, s) => acc + s.positivePercent, 0) / Object.keys(stateImpactData).length)}%
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">High Risk States</span>
-                  <span className="font-semibold text-red-600">{riskStates}</span>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
+
+        {/* Analysis Summary - Full Width Below Map */}
+        <Card className="shadow-soft animate-fade-in mt-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-secondary" />
+              Comprehensive Analysis Summary
+            </CardTitle>
+            <CardDescription>
+              Overview of law impact across all states and union territories
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground">Total Regions Analyzed</div>
+                <div className="text-3xl font-bold text-foreground">{Object.keys(stateImpactData).length}</div>
+                <div className="text-xs text-muted-foreground">States & Union Territories</div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground">Average Positive Impact</div>
+                <div className="text-3xl font-bold text-emerald-600">
+                  {Math.round(Object.values(stateImpactData).reduce((acc, s) => acc + s.positivePercent, 0) / Object.keys(stateImpactData).length)}%
+                </div>
+                <div className="text-xs text-muted-foreground">Across all regions</div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground">Average Risk Level</div>
+                <div className="text-3xl font-bold text-red-600">
+                  {Math.round(Object.values(stateImpactData).reduce((acc, s) => acc + s.riskPercent, 0) / Object.keys(stateImpactData).length)}%
+                </div>
+                <div className="text-xs text-muted-foreground">Requiring attention</div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground">High Risk Regions</div>
+                <div className="text-3xl font-bold text-amber-600">{riskStates}</div>
+                <div className="text-xs text-muted-foreground">States needing support</div>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-3 gap-4 mt-6 pt-6 border-t">
+              <div className="bg-emerald-50 dark:bg-emerald-950/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+                  <span className="font-medium text-emerald-700 dark:text-emerald-400">Positive Impact</span>
+                </div>
+                <div className="text-2xl font-bold text-emerald-600">{positiveStates} regions</div>
+                <p className="text-xs text-emerald-600/80 mt-1">High readiness for implementation with strong economic and social benefits expected</p>
+              </div>
+              <div className="bg-amber-50 dark:bg-amber-950/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                  <span className="font-medium text-amber-700 dark:text-amber-400">Neutral Impact</span>
+                </div>
+                <div className="text-2xl font-bold text-amber-600">{neutralStates} regions</div>
+                <p className="text-xs text-amber-600/80 mt-1">Moderate readiness with balanced outcomes requiring monitoring</p>
+              </div>
+              <div className="bg-red-50 dark:bg-red-950/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <span className="font-medium text-red-700 dark:text-red-400">Risk Areas</span>
+                </div>
+                <div className="text-2xl font-bold text-red-600">{riskStates} regions</div>
+                <p className="text-xs text-red-600/80 mt-1">Need targeted support programs and extended compliance timelines</p>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-6 border-t">
+              <h4 className="font-medium mb-3">Key Observations</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-emerald-500 mt-1">•</span>
+                  Southern and Western states show highest adoption readiness due to existing digital infrastructure
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-500 mt-1">•</span>
+                  North-Eastern states require special provisions for geographic and infrastructure challenges
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">•</span>
+                  States with large informal sectors (UP, Bihar, Jharkhand) need phased implementation approach
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-secondary mt-1">•</span>
+                  Union Territories show varied readiness based on their administrative structure and economic focus
+                </li>
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
       </main>
 
       <Footer />
