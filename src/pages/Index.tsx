@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   FileText, 
@@ -111,6 +111,22 @@ const Index = () => {
     modFuture: false,
   });
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Auto-save analysis data whenever inputs change (so other pages can use latest data)
+  useEffect(() => {
+    const hasModule = Object.values(selectedModules).some((v) => v);
+    if (lawText.trim() && hasModule) {
+      const data: AnalysisData = {
+        role,
+        state: selectedState,
+        lang: language,
+        lawText,
+        modules: selectedModules,
+        timestamp: Date.now(),
+      };
+      saveAnalysisData(data);
+    }
+  }, [role, selectedState, language, lawText, selectedModules]);
 
   const handleModuleToggle = (moduleId: string) => {
     setSelectedModules((prev) => ({
