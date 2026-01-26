@@ -89,10 +89,10 @@ const statePositions: Record<string, { top: string; left: string }> = {
   "Andhra Pradesh": { top: "72%", left: "42%" },
   "Telangana": { top: "60%", left: "38%" },
   "Andaman & Nicobar": { top: "72%", left: "78%" },
-  "Lakshadweep": { top: "85%", left: "18%" },
+  "Lakshadweep": { top: "85%", left: "12%" },
   "Dadra & Nagar Haveli": { top: "56%", left: "24%" },
   "Daman & Diu": { top: "54%", left: "18%" },
-  "Puducherry": { top: "85%", left: "44%" },
+  "Puducherry": { top: "87%", left: "44%" },
   "Chandigarh": { top: "22%", left: "26%" },
 };
 
