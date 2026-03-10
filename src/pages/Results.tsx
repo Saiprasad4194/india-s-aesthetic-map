@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getAnalysisData, pseudoRandomPercent, type AnalysisData } from "@/lib/analysisStore";
+import { getAnalysisData, getAIResult, pseudoRandomPercent, type AnalysisData, type AIAnalysisResult } from "@/lib/analysisStore";
 
 interface AnalysisCard {
   id: string;
