@@ -18,9 +18,11 @@ interface AnalysisCard {
 
 const Results = () => {
   const [data, setData] = useState<AnalysisData | null>(null);
+  const [aiResult, setAIResult] = useState<AIAnalysisResult | null>(null);
 
   useEffect(() => {
     setData(getAnalysisData());
+    setAIResult(getAIResult());
   }, []);
 
   if (!data) {
