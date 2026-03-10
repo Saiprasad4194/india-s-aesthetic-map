@@ -24,7 +24,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { saveAnalysisData, INDIAN_STATES, DEFAULT_LAW_TEXT, type AnalysisData } from "@/lib/analysisStore";
+import { saveAnalysisData, saveAIResult, INDIAN_STATES, DEFAULT_LAW_TEXT, type AnalysisData } from "@/lib/analysisStore";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const modules = [
@@ -153,7 +154,7 @@ const Index = () => {
     toast.success("Form reset to defaults");
   };
 
-  const handleRunAnalysis = () => {
+  const handleRunAnalysis = async () => {
     if (!lawText.trim()) {
       toast.error("Please enter the draft law text");
       return;
@@ -178,12 +179,37 @@ const Index = () => {
 
     saveAnalysisData(data);
 
-    // Simulate analysis delay
-    setTimeout(() => {
+    try {
+      const { data: result, error } = await supabase.functions.invoke("analyze-law", {
+        body: {
+          lawText,
+          role,
+          state: selectedState,
+          lang: language,
+          modules: selectedModules,
+        },
+      });
+
+      if (error) throw error;
+
+      if (result?.error) {
+        toast.error(result.error);
+        setIsAnalyzing(false);
+        return;
+      }
+
+      if (result?.analysis) {
+        saveAIResult(result.analysis);
+      }
+
       setIsAnalyzing(false);
-      toast.success("Analysis complete! Redirecting to results...");
+      toast.success("AI Analysis complete! Redirecting to results...");
       navigate("/results");
-    }, 1500);
+    } catch (err: any) {
+      console.error("Analysis error:", err);
+      setIsAnalyzing(false);
+      toast.error(err?.message || "Failed to run AI analysis. Please try again.");
+    }
   };
 
   return (

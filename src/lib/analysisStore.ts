@@ -16,7 +16,69 @@ export interface AnalysisData {
   timestamp: number;
 }
 
+// AI analysis result from the edge function
+export interface AIAnalysisResult {
+  modLegal?: {
+    summary_en: string;
+    summary_hi: string;
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+  };
+  modEconomic?: {
+    revenueImpact: string;
+    complianceSavings: string;
+    jobCreation: string;
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+    details: string;
+  };
+  modGeo?: {
+    highReadiness: string[];
+    mediumReadiness: string[];
+    needSupport: string[];
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+    stateImpacts?: Record<string, {
+      impact: "positive" | "neutral" | "risk";
+      positivePercent: number;
+      neutralPercent: number;
+      riskPercent: number;
+      keyInsight: string;
+    }>;
+  };
+  modCommunity?: {
+    summary: string;
+    recommendations: string[];
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+  };
+  modGender?: {
+    summary: string;
+    womenBenefit: string;
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+  };
+  modGlobal?: {
+    comparisons: Array<{ country: string; policy: string; outcome: string }>;
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+  };
+  modPrevious?: {
+    lessons: string[];
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+  };
+  modFuture?: {
+    optimistic: { formalization: string; revenue: string };
+    neutral: { formalization: string; revenue: string };
+    cautious: { formalization: string; revenue: string };
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+  };
+}
+
 const STORAGE_KEY = "aiParliamentAnalysis";
+const AI_RESULT_KEY = "aiParliamentResult";
 
 export const saveAnalysisData = (data: AnalysisData) => {
   sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -27,8 +89,18 @@ export const getAnalysisData = (): AnalysisData | null => {
   return data ? JSON.parse(data) : null;
 };
 
+export const saveAIResult = (result: AIAnalysisResult) => {
+  sessionStorage.setItem(AI_RESULT_KEY, JSON.stringify(result));
+};
+
+export const getAIResult = (): AIAnalysisResult | null => {
+  const data = sessionStorage.getItem(AI_RESULT_KEY);
+  return data ? JSON.parse(data) : null;
+};
+
 export const clearAnalysisData = () => {
   sessionStorage.removeItem(STORAGE_KEY);
+  sessionStorage.removeItem(AI_RESULT_KEY);
 };
 
 // Utility: pseudo-random for confidence % so UI looks alive
