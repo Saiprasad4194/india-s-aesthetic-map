@@ -24,7 +24,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { saveAnalysisData, INDIAN_STATES, DEFAULT_LAW_TEXT, type AnalysisData } from "@/lib/analysisStore";
+import { saveAnalysisData, saveAIResult, INDIAN_STATES, DEFAULT_LAW_TEXT, type AnalysisData } from "@/lib/analysisStore";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const modules = [
