@@ -326,7 +326,8 @@ const Results = () => {
         <div className="grid md:grid-cols-2 gap-6 stagger-children">
           {cards.map((card) => {
             const Icon = card.icon;
-            const confidence = pseudoRandomPercent(card.id + data.timestamp);
+            const aiModuleResult = aiResult?.[card.id === "legal" ? "modLegal" : card.id === "economic" ? "modEconomic" : card.id === "geo" ? "modGeo" : card.id === "community" ? "modCommunity" : card.id === "gender" ? "modGender" : card.id === "global" ? "modGlobal" : card.id === "previous" ? "modPrevious" : "modFuture"] as any;
+            const confidence = aiModuleResult?.confidence || pseudoRandomPercent(card.id + data.timestamp);
 
             return (
               <Card
