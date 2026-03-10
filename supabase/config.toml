@@ -1,1 +1,4 @@
 project_id = "llvduowupykmzngkhnqr"
+
+[functions.analyze-law]
+verify_jwt = false
