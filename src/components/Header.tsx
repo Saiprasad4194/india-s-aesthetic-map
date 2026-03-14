@@ -1,16 +1,21 @@
 import { Link, useLocation } from "react-router-dom";
-import { FileText, BarChart3, LineChart, Map } from "lucide-react";
+import { FileText, BarChart3, LineChart, Map, LogIn, LogOut, History, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import AshokaChakra from "./AshokaChakra";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { path: "/", label: "Input", icon: FileText },
   { path: "/results", label: "Results", icon: BarChart3 },
   { path: "/impact", label: "Impact Graphs", icon: LineChart },
   { path: "/maps", label: "Maps", icon: Map },
+  { path: "/history", label: "History", icon: History },
+  { path: "/about", label: "About", icon: Info },
 ];
 
 const Header = () => {
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full glass-dark">
@@ -26,14 +31,11 @@ const Header = () => {
           {/* Main Header */}
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-4">
-              {/* Emblem */}
               <div className="relative">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-secondary via-accent to-secondary flex items-center justify-center shadow-glow">
                   <AshokaChakra className="w-10 h-10 text-primary chakra-spin" />
                 </div>
               </div>
-              
-              {/* Brand Text */}
               <div className="flex flex-col">
                 <span className="text-xs uppercase tracking-[0.2em] text-white/80 font-medium">
                   AI Parliament
@@ -47,11 +49,36 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Badge */}
-            <div className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs text-white/90 flex items-center gap-2">
-              <span>⚖️</span>
-              <span className="hidden sm:inline">Academic Prototype</span>
-              <span className="sm:hidden">Demo</span>
+            {/* Auth + Badge */}
+            <div className="flex items-center gap-3">
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-white/80 hidden sm:inline">{user.email}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={signOut}
+                    className="text-white/80 hover:text-white hover:bg-white/10"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </Button>
+                </div>
+              ) : (
+                <Link to="/auth">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-white/80 hover:text-white hover:bg-white/10 gap-1"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    <span className="hidden sm:inline">Sign In</span>
+                  </Button>
+                </Link>
+              )}
+              <div className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs text-white/90 flex items-center gap-2">
+                <span>⚖️</span>
+                <span className="hidden sm:inline">Academic Prototype</span>
+              </div>
             </div>
           </div>
 
