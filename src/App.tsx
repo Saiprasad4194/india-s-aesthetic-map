@@ -11,6 +11,7 @@ import Maps from "./pages/Maps";
 import Auth from "./pages/Auth";
 import History from "./pages/History";
 import About from "./pages/About";
+import Simulation from "./pages/Simulation";
 import SharedAnalysis from "./pages/SharedAnalysis";
 import NotFound from "./pages/NotFound";
 
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/history" element={<History />} />
             <Route path="/about" element={<About />} />
+            <Route path="/simulation" element={<Simulation />} />
             <Route path="/shared/:shareId" element={<SharedAnalysis />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
