@@ -2,3 +2,6 @@ project_id = "llvduowupykmzngkhnqr"
 
 [functions.analyze-law]
 verify_jwt = false
+
+[functions.simulate-policy]
+verify_jwt = false
