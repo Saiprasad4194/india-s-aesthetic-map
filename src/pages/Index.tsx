@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
-  FileText, Play, RotateCcw, Scale, TrendingUp, MapPin, Users, Heart, Globe, History, Telescope, ChevronRight, Sparkles, Loader2
+  FileText, Play, RotateCcw, Scale, TrendingUp, MapPin, Users, Heart, Globe, History, Telescope, ChevronRight, Sparkles, Loader2, Leaf, MessageSquare, ShieldAlert, Upload
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,14 +19,17 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
 const modules = [
-  { id: "modLegal", title: "Simplified Legal Explanation", description: "One-paragraph summary, adapted to the selected language.", icon: Scale, badge: "Plain language", sensitive: false },
-  { id: "modEconomic", title: "Economic & Fiscal Impact", description: "High-level view of revenue, compliance cost, and MSE competitiveness.", icon: TrendingUp, badge: "Revenue & jobs", sensitive: false },
-  { id: "modGeo", title: "State / District-wise Impact", description: "Central role: compares states. State role: drills down to districts.", icon: MapPin, badge: "Role-aware", sensitive: false },
-  { id: "modCommunity", title: "Community Impact", description: "Flags where specific communities might be unintentionally advantaged or disadvantaged.", icon: Users, badge: "Tribe, region, language", sensitive: true },
-  { id: "modGender", title: "Gender-specific Impact", description: "Looks at how provisions affect men, women, and non-binary citizens differently.", icon: Heart, badge: "Women-led enterprises", sensitive: true },
-  { id: "modGlobal", title: "Global Law Comparison", description: "Compares the proposal with similar policies in other countries.", icon: Globe, badge: "International reference", sensitive: false },
-  { id: "modPrevious", title: "Previous Law Impact & Suggestions", description: "Uses mock data from earlier GST or tax reforms to suggest improvements.", icon: History, badge: "Lessons learned", sensitive: false },
-  { id: "modFuture", title: "Future National Impact Prediction", description: "Simple 3-year projection under optimistic, neutral, and cautious scenarios.", icon: Telescope, badge: "Scenario view", sensitive: false },
+  { id: "modLegal", title: "Law Summary & Breakdown", description: "AI extracts sections, stakeholders, objectives, and classifies the policy.", icon: Scale, badge: "Clause detection", sensitive: false },
+  { id: "modEconomic", title: "Economic & Fiscal Impact", description: "GDP impact, industry costs, employment changes, sector-wise analysis.", icon: TrendingUp, badge: "Revenue & jobs", sensitive: false },
+  { id: "modGeo", title: "State / District-wise Impact", description: "Central: state comparison. State: district drill-down with readiness levels.", icon: MapPin, badge: "Role-aware", sensitive: false },
+  { id: "modCommunity", title: "Social & Community Impact", description: "Urban vs rural impact, inequality effects, community-specific analysis.", icon: Users, badge: "Urban/Rural", sensitive: true },
+  { id: "modGender", title: "Gender-specific Impact", description: "How provisions affect men, women, and non-binary citizens differently.", icon: Heart, badge: "Women-led enterprises", sensitive: true },
+  { id: "modEnvironmental", title: "Environmental Impact", description: "Carbon emissions, pollution changes, resource usage, sustainability score.", icon: Leaf, badge: "Green analysis", sensitive: false },
+  { id: "modSentiment", title: "Public Sentiment Analysis", description: "Predicted public support, opposition, and media reactions.", icon: MessageSquare, badge: "Public opinion", sensitive: false },
+  { id: "modRiskScore", title: "Risk Assessment & Legal Conflicts", description: "Risk scores across dimensions, conflicts with existing laws, mitigation strategies.", icon: ShieldAlert, badge: "Risk matrix", sensitive: false },
+  { id: "modGlobal", title: "Global Law Comparison", description: "Compares the proposal with similar policies in other countries.", icon: Globe, badge: "International", sensitive: false },
+  { id: "modPrevious", title: "Lessons from Past Reforms", description: "Key learnings from earlier reforms to suggest improvements.", icon: History, badge: "Lessons learned", sensitive: false },
+  { id: "modFuture", title: "Future National Impact Prediction", description: "3-year projection under optimistic, neutral, and cautious scenarios.", icon: Telescope, badge: "Scenario view", sensitive: false },
 ];
 
 const Index = () => {
@@ -39,6 +42,7 @@ const Index = () => {
   const [selectedModules, setSelectedModules] = useState({
     modLegal: true, modEconomic: true, modGeo: true, modCommunity: false,
     modGender: false, modGlobal: false, modPrevious: false, modFuture: false,
+    modEnvironmental: false, modSentiment: false, modRiskScore: false,
   });
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -58,6 +62,13 @@ const Index = () => {
     setSelectedModules((prev) => ({ ...prev, [moduleId]: !prev[moduleId as keyof typeof prev] }));
   };
 
+  const selectAllModules = () => {
+    const allSelected = Object.values(selectedModules).every(v => v);
+    const newState = {} as any;
+    Object.keys(selectedModules).forEach(k => { newState[k] = !allSelected; });
+    setSelectedModules(newState);
+  };
+
   const handleReset = () => {
     setRole("central");
     setSelectedState(INDIAN_STATES[0]);
@@ -66,8 +77,24 @@ const Index = () => {
     setSelectedModules({
       modLegal: true, modEconomic: true, modGeo: true, modCommunity: false,
       modGender: false, modGlobal: false, modPrevious: false, modFuture: false,
+      modEnvironmental: false, modSentiment: false, modRiskScore: false,
     });
     toast.success("Form reset to defaults");
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type === "text/plain" || file.name.endsWith(".txt") || file.name.endsWith(".md")) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const text = ev.target?.result as string;
+        if (text) { setLawText(text); toast.success("File loaded successfully"); }
+      };
+      reader.readAsText(file);
+    } else {
+      toast.error("Please upload a .txt or .md file. PDF parsing coming soon!");
+    }
   };
 
   const handleRunAnalysis = async () => {
@@ -105,7 +132,6 @@ const Index = () => {
       setProgress(85);
       setProgressLabel("Saving to database...");
 
-      // Save to database if user is logged in
       if (user) {
         const title = lawText.substring(0, 60).replace(/\n/g, " ").trim() + "...";
         await supabase.from("analyses").insert({
@@ -137,6 +163,8 @@ const Index = () => {
     }
   };
 
+  const selectedCount = Object.values(selectedModules).filter(Boolean).length;
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
@@ -158,7 +186,7 @@ const Index = () => {
                 </div>
                 <Progress value={progress} className="h-2" />
                 <p className="text-xs text-center text-muted-foreground">
-                  Analyzing {Object.values(selectedModules).filter(Boolean).length} modules...
+                  Analyzing {selectedCount} modules...
                 </p>
               </CardContent>
             </Card>
@@ -177,7 +205,7 @@ const Index = () => {
                     </div>
                     <div>
                       <CardTitle className="text-lg">Law & Role Configuration</CardTitle>
-                      <CardDescription>Select who you are analysing for, then choose or paste a draft law.</CardDescription>
+                      <CardDescription>Upload or paste a bill, select your analysis perspective.</CardDescription>
                     </div>
                   </div>
                   <Button variant="outline" size="sm" onClick={handleReset}>
@@ -190,7 +218,7 @@ const Index = () => {
                 <div className="space-y-3">
                   <Label className="text-sm font-medium">
                     Government Role
-                    <span className="text-xs text-muted-foreground ml-2 font-normal">Central view shows state-wise impact. State view shows district-wise impact.</span>
+                    <span className="text-xs text-muted-foreground ml-2 font-normal">Central shows state-level; State shows district-level analysis.</span>
                   </Label>
                   <div className="flex flex-wrap gap-4">
                     <div className="flex-1 min-w-[140px]">
@@ -224,35 +252,44 @@ const Index = () => {
                       </Select>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="text-xs">Central → state heat-map</Badge>
-                    <Badge variant="secondary" className="text-xs">State → district drill-down</Badge>
-                    <Badge variant="secondary" className="text-xs">Language-aware explanations</Badge>
-                  </div>
                 </div>
 
-                {/* Law Text */}
+                {/* Law Text + Upload */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <Label className="text-sm font-medium">Draft Law / Policy Text</Label>
-                    <Button variant="ghost" size="sm" onClick={() => setLawText(DEFAULT_LAW_TEXT)} className="text-xs">
-                      <FileText className="w-3 h-3 mr-1" /> Restore sample
-                    </Button>
+                    <div className="flex gap-2">
+                      <label className="cursor-pointer">
+                        <input type="file" accept=".txt,.md" onChange={handleFileUpload} className="hidden" />
+                        <Button variant="ghost" size="sm" className="text-xs" asChild>
+                          <span><Upload className="w-3 h-3 mr-1" /> Upload File</span>
+                        </Button>
+                      </label>
+                      <Button variant="ghost" size="sm" onClick={() => setLawText(DEFAULT_LAW_TEXT)} className="text-xs">
+                        <FileText className="w-3 h-3 mr-1" /> Restore sample
+                      </Button>
+                    </div>
                   </div>
                   <Textarea
                     value={lawText}
                     onChange={(e) => setLawText(e.target.value)}
-                    placeholder="Paste or type your draft law here..."
+                    placeholder="Paste or type your draft law here, or upload a text file..."
                     className="min-h-[200px] font-mono text-sm"
                   />
+                  <p className="text-xs text-muted-foreground">Supports: Plain text, .txt, .md files. Paste from parliamentary websites or government documents.</p>
                 </div>
 
                 {/* AI Modules */}
                 <div className="space-y-3">
-                  <Label className="text-sm font-medium">
-                    AI Analysis Modules
-                    <span className="text-xs text-muted-foreground ml-2 font-normal">Select modules to include in this run</span>
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-medium">
+                      AI Analysis Modules
+                      <span className="text-xs text-muted-foreground ml-2 font-normal">{selectedCount} of {modules.length} selected</span>
+                    </Label>
+                    <Button variant="ghost" size="sm" onClick={selectAllModules} className="text-xs">
+                      {Object.values(selectedModules).every(v => v) ? "Deselect All" : "Select All"}
+                    </Button>
+                  </div>
                   <div className="grid sm:grid-cols-2 gap-3 stagger-children">
                     {modules.map((module) => {
                       const Icon = module.icon;
@@ -315,18 +352,19 @@ const Index = () => {
                     <span className="text-lg font-bold text-secondary">②</span>
                   </div>
                   <div>
-                    <CardTitle className="text-lg">Quick Preview</CardTitle>
-                    <CardDescription>Run analysis to see results</CardDescription>
+                    <CardTitle className="text-lg">What You'll Get</CardTitle>
+                    <CardDescription>Comprehensive AI-powered analysis</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">After running the analysis, you can view:</p>
+                <p className="text-sm text-muted-foreground">After running the analysis, explore:</p>
                 <ul className="space-y-3">
                   {[
-                    { label: "Results Page", desc: "Detailed analysis cards with explanations", path: "/results" },
-                    { label: "Impact Graphs", desc: "Visual charts showing economic and social impact", path: "/impact" },
+                    { label: "Results Page", desc: "Law breakdown, summaries, stakeholder identification", path: "/results" },
+                    { label: "Impact Dashboard", desc: "Charts: economic, environmental, sentiment, risk scores", path: "/impact" },
                     { label: "Maps", desc: "Interactive India map with state-wise impact", path: "/maps" },
+                    { label: "Simulation", desc: "Tweak parameters and see AI-predicted outcomes", path: "/simulation" },
                   ].map((item) => (
                     <li key={item.path} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
                       <ChevronRight className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
@@ -337,9 +375,11 @@ const Index = () => {
                     </li>
                   ))}
                 </ul>
-                <p className="text-xs text-muted-foreground italic">
-                  Click "Run AI Analysis" to generate data, then navigate using the menu above.
-                </p>
+                <div className="p-3 rounded-lg bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10">
+                  <p className="text-xs text-muted-foreground">
+                    <strong className="text-foreground">Who uses this:</strong> Government analysts, policy researchers, NGOs, journalists, and citizens.
+                  </p>
+                </div>
               </CardContent>
             </Card>
           </div>

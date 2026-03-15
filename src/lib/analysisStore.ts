@@ -12,25 +12,37 @@ export interface AnalysisData {
     modGlobal: boolean;
     modPrevious: boolean;
     modFuture: boolean;
+    modEnvironmental: boolean;
+    modSentiment: boolean;
+    modRiskScore: boolean;
   };
   timestamp: number;
 }
 
-// AI analysis result from the edge function
 export interface AIAnalysisResult {
   modLegal?: {
     summary_en: string;
     summary_hi: string;
     status: "positive" | "neutral" | "risk";
     confidence: number;
+    sections?: Array<{ title: string; meaning: string; affectedParties: string }>;
+    objective?: string;
+    affectedSectors?: string[];
+    stakeholders?: string[];
+    policyClassification?: string;
   };
   modEconomic?: {
     revenueImpact: string;
     complianceSavings: string;
     jobCreation: string;
+    gdpImpact?: string;
+    industryCostChange?: string;
+    employmentChange?: string;
     status: "positive" | "neutral" | "risk";
     confidence: number;
     details: string;
+    sectorImpacts?: Array<{ sector: string; impact: string; change: string; details: string }>;
+    timelineProjection?: Array<{ period: string; revenue: number; employment: number; adoption: number }>;
   };
   modGeo?: {
     highReadiness: string[];
@@ -51,6 +63,9 @@ export interface AIAnalysisResult {
     recommendations: string[];
     status: "positive" | "neutral" | "risk";
     confidence: number;
+    urbanImpact?: string;
+    ruralImpact?: string;
+    inequalityEffect?: string;
   };
   modGender?: {
     summary: string;
@@ -72,6 +87,38 @@ export interface AIAnalysisResult {
     optimistic: { formalization: string; revenue: string };
     neutral: { formalization: string; revenue: string };
     cautious: { formalization: string; revenue: string };
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+  };
+  modEnvironmental?: {
+    carbonImpact: string;
+    pollutionChange: string;
+    resourceUsage: string;
+    sustainabilityScore: number;
+    summary: string;
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+    recommendations?: string[];
+  };
+  modSentiment?: {
+    publicSupport: number;
+    publicOpposition: number;
+    neutralSentiment: number;
+    summary: string;
+    newsReactions?: Array<{ source: string; sentiment: string; summary: string }>;
+    status: "positive" | "neutral" | "risk";
+    confidence: number;
+  };
+  modRiskScore?: {
+    economicRisk: number;
+    socialRisk: number;
+    environmentalRisk: number;
+    legalRisk: number;
+    politicalRisk: number;
+    overallRisk: number;
+    summary: string;
+    legalConflicts?: string[];
+    mitigationStrategies?: string[];
     status: "positive" | "neutral" | "risk";
     confidence: number;
   };
@@ -103,7 +150,6 @@ export const clearAnalysisData = () => {
   sessionStorage.removeItem(AI_RESULT_KEY);
 };
 
-// Utility: pseudo-random for confidence % so UI looks alive
 export const pseudoRandomPercent = (seedText: string): number => {
   let hash = 0;
   for (let i = 0; i < seedText.length; i++) {
@@ -113,37 +159,12 @@ export const pseudoRandomPercent = (seedText: string): number => {
 };
 
 export const INDIAN_STATES = [
-  "Jammu & Kashmir",
-  "Ladakh",
-  "Himachal Pradesh",
-  "Punjab",
-  "Haryana",
-  "Uttarakhand",
-  "Uttar Pradesh",
-  "Rajasthan",
-  "Delhi",
-  "Gujarat",
-  "Maharashtra",
-  "Goa",
-  "Karnataka",
-  "Kerala",
-  "Tamil Nadu",
-  "Andhra Pradesh",
-  "Telangana",
-  "West Bengal",
-  "Odisha",
-  "Jharkhand",
-  "Bihar",
-  "Chhattisgarh",
-  "Madhya Pradesh",
-  "Assam",
-  "Arunachal Pradesh",
-  "Nagaland",
-  "Manipur",
-  "Mizoram",
-  "Tripura",
-  "Meghalaya",
-  "Sikkim",
+  "Jammu & Kashmir", "Ladakh", "Himachal Pradesh", "Punjab", "Haryana",
+  "Uttarakhand", "Uttar Pradesh", "Rajasthan", "Delhi", "Gujarat",
+  "Maharashtra", "Goa", "Karnataka", "Kerala", "Tamil Nadu",
+  "Andhra Pradesh", "Telangana", "West Bengal", "Odisha", "Jharkhand",
+  "Bihar", "Chhattisgarh", "Madhya Pradesh", "Assam", "Arunachal Pradesh",
+  "Nagaland", "Manipur", "Mizoram", "Tripura", "Meghalaya", "Sikkim",
 ];
 
 export const DEFAULT_LAW_TEXT = `DRAFT LAW: Goods & Services Tax Credit Harmonisation (Amendment) Bill, 2026

@@ -33,15 +33,25 @@ Analyze the given draft law and return a JSON object with the following structur
     "summary_en": "Plain English summary of the law (2-3 sentences)",
     "summary_hi": "Same summary in simple Hindi",
     "status": "positive" | "neutral" | "risk",
-    "confidence": 60-96
+    "confidence": 60-96,
+    "sections": [{"title": "section name", "meaning": "what it means", "affectedParties": "who is affected"}],
+    "objective": "main objective of the law",
+    "affectedSectors": ["list of affected sectors/industries"],
+    "stakeholders": ["list of key stakeholders"],
+    "policyClassification": "e.g. Tax Reform, Environmental, Social Welfare, etc."
   },
   "modEconomic": {
     "revenueImpact": "e.g. +₹2,400 Cr projected",
     "complianceSavings": "e.g. ~18% reduction",
     "jobCreation": "High" | "Medium" | "Low",
+    "gdpImpact": "e.g. +0.3% GDP contribution",
+    "industryCostChange": "e.g. -12% compliance cost for MSEs",
+    "employmentChange": "e.g. +30,000 direct jobs",
     "status": "positive" | "neutral" | "risk",
     "confidence": 60-96,
-    "details": "2-3 sentence explanation"
+    "details": "2-3 sentence explanation",
+    "sectorImpacts": [{"sector": "name", "impact": "positive"|"neutral"|"risk", "change": "+X% or -X%", "details": "one line"}],
+    "timelineProjection": [{"period": "Q1 2026", "revenue": 0, "employment": 0, "adoption": 0}]
   },
   "modGeo": {
     "highReadiness": ["list of states with high digital readiness"],
@@ -57,7 +67,10 @@ Analyze the given draft law and return a JSON object with the following structur
     "summary": "2-3 sentences about community impact",
     "recommendations": ["list of recommendations"],
     "status": "positive" | "neutral" | "risk",
-    "confidence": 60-96
+    "confidence": 60-96,
+    "urbanImpact": "summary of urban impact",
+    "ruralImpact": "summary of rural impact",
+    "inequalityEffect": "how it affects inequality"
   },
   "modGender": {
     "summary": "2-3 sentences about gender-specific impact",
@@ -81,6 +94,38 @@ Analyze the given draft law and return a JSON object with the following structur
     "cautious": { "formalization": "45%", "revenue": "₹1,200 Cr" },
     "status": "positive" | "neutral" | "risk",
     "confidence": 60-96
+  },
+  "modEnvironmental": {
+    "carbonImpact": "e.g. -5% carbon emissions in manufacturing",
+    "pollutionChange": "e.g. Moderate reduction in industrial pollution",
+    "resourceUsage": "e.g. +12% efficient resource utilization",
+    "sustainabilityScore": 0-100,
+    "summary": "2-3 sentences about environmental impact",
+    "status": "positive" | "neutral" | "risk",
+    "confidence": 60-96,
+    "recommendations": ["environmental recommendations"]
+  },
+  "modSentiment": {
+    "publicSupport": 0-100,
+    "publicOpposition": 0-100,
+    "neutralSentiment": 0-100,
+    "summary": "2-3 sentences about likely public reaction",
+    "newsReactions": [{"source": "type of media", "sentiment": "positive"|"negative"|"neutral", "summary": "one line"}],
+    "status": "positive" | "neutral" | "risk",
+    "confidence": 60-96
+  },
+  "modRiskScore": {
+    "economicRisk": 1-10,
+    "socialRisk": 1-10,
+    "environmentalRisk": 1-10,
+    "legalRisk": 1-10,
+    "politicalRisk": 1-10,
+    "overallRisk": 1-10,
+    "summary": "2-3 sentences about overall risk assessment",
+    "legalConflicts": ["list of potential conflicts with existing laws or constitutional provisions"],
+    "mitigationStrategies": ["list of risk mitigation strategies"],
+    "status": "positive" | "neutral" | "risk",
+    "confidence": 60-96
   }
 }
 
@@ -88,7 +133,7 @@ Only include modules that are requested. The role is "${role}" and ${role === "s
 Language preference: ${lang === "hi" ? "Include Hindi summaries where applicable" : "English only"}.
 Requested modules: ${enabledModules.join(", ")}
 
-Be specific to the actual law text provided. Use realistic Indian economic figures and state names.`;
+Be specific to the actual law text provided. Use realistic Indian economic figures and state names. For sections analysis, break the law into its key clauses/provisions.`;
 
     const response = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",
@@ -136,7 +181,6 @@ Be specific to the actual law text provided. Use realistic Indian economic figur
       throw new Error("No content in AI response");
     }
 
-    // Parse the JSON from the AI response (strip markdown code fences if present)
     let analysisResult;
     try {
       const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();

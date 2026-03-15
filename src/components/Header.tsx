@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { FileText, BarChart3, LineChart, Map, LogIn, LogOut, History, Info } from "lucide-react";
+import { FileText, BarChart3, LineChart, Map, LogIn, LogOut, History, Info, Sliders } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AshokaChakra from "./AshokaChakra";
 import { useAuth } from "@/contexts/AuthContext";
@@ -7,8 +7,9 @@ import { useAuth } from "@/contexts/AuthContext";
 const navItems = [
   { path: "/", label: "Input", icon: FileText },
   { path: "/results", label: "Results", icon: BarChart3 },
-  { path: "/impact", label: "Impact Graphs", icon: LineChart },
+  { path: "/impact", label: "Impact", icon: LineChart },
   { path: "/maps", label: "Maps", icon: Map },
+  { path: "/simulation", label: "Simulate", icon: Sliders },
   { path: "/history", label: "History", icon: History },
   { path: "/about", label: "About", icon: Info },
 ];
@@ -20,7 +21,6 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full glass-dark">
       <div className="bg-gradient-to-r from-primary via-primary to-primary/90">
-        {/* Tricolor Stripe */}
         <div className="flex h-1">
           <div className="flex-1 bg-secondary" />
           <div className="flex-1 bg-white" />
@@ -28,7 +28,6 @@ const Header = () => {
         </div>
         
         <div className="container py-4">
-          {/* Main Header */}
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-4">
               <div className="relative">
@@ -44,32 +43,22 @@ const Header = () => {
                   Law Impact Analysis System
                 </h1>
                 <p className="text-xs text-white/70 mt-0.5 max-w-md hidden sm:block">
-                  Enabling Central and State Governments to understand law impacts
+                  AI-powered policy analysis for government, researchers, and citizens
                 </p>
               </div>
             </div>
 
-            {/* Auth + Badge */}
             <div className="flex items-center gap-3">
               {user ? (
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-white/80 hidden sm:inline">{user.email}</span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={signOut}
-                    className="text-white/80 hover:text-white hover:bg-white/10"
-                  >
+                  <Button variant="ghost" size="sm" onClick={signOut} className="text-white/80 hover:text-white hover:bg-white/10">
                     <LogOut className="w-4 h-4" />
                   </Button>
                 </div>
               ) : (
                 <Link to="/auth">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-white/80 hover:text-white hover:bg-white/10 gap-1"
-                  >
+                  <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10 gap-1">
                     <LogIn className="w-4 h-4" />
                     <span className="hidden sm:inline">Sign In</span>
                   </Button>
@@ -82,7 +71,6 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Navigation */}
           <nav className="flex gap-2 mt-4 pt-4 border-t border-white/10 flex-wrap">
             {navItems.map(({ path, label, icon: Icon }) => {
               const isActive = location.pathname === path;
