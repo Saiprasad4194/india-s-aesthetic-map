@@ -44,7 +44,21 @@ const Simulation = () => {
 
       if (error) throw error;
       if (data?.error) { toast.error(data.error); return; }
-      if (data?.simulation) setResult(data.simulation);
+
+      // Persist simulation so Maps module can react to latest scenario
+      if (data?.simulation) {
+        const enrichedSimulation = {
+          ...data.simulation,
+          parameters,
+          generatedAt: Date.now(),
+        };
+        setResult(enrichedSimulation);
+        try {
+          sessionStorage.setItem("policySimulation", JSON.stringify(enrichedSimulation));
+        } catch {
+          // ignore storage failures
+        }
+      }
 
       toast.success("Simulation complete!");
     } catch (err: any) {
