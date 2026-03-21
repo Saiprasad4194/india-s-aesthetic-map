@@ -60,7 +60,18 @@ Analyze the given draft law and return a JSON object with the following structur
     "status": "positive" | "neutral" | "risk",
     "confidence": 60-96,
     "stateImpacts": {
-      "StateName": { "impact": "positive"|"neutral"|"risk", "positivePercent": 0-100, "neutralPercent": 0-100, "riskPercent": 0-100, "keyInsight": "one line" }
+      "StateName": {
+        "impact": "positive"|"neutral"|"risk",
+        "positivePercent": 0-100, "neutralPercent": 0-100, "riskPercent": 0-100,
+        "keyInsight": "one line insight specific to this state and the law",
+        "economicScore": 1-10, "socialScore": 1-10, "environmentalScore": 1-10, "employmentScore": 1-10,
+        "sectors": [{"sector": "sector name", "change": -10 to +20}],
+        "stakeholders": ["key stakeholder groups in this state"],
+        "infraReadiness": 0-100,
+        "riskLevel": "low"|"medium"|"high",
+        "riskDrivers": ["reasons for risk in this state"],
+        "timeline": [{"year": 1, "label": "what happens"}, {"year": 3, "label": "..."}, {"year": 5, "label": "..."}]
+      }
     }
   },
   "modCommunity": {

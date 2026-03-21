@@ -56,6 +56,16 @@ export interface AIAnalysisResult {
       neutralPercent: number;
       riskPercent: number;
       keyInsight: string;
+      economicScore: number;
+      socialScore: number;
+      environmentalScore: number;
+      employmentScore: number;
+      sectors: Array<{ sector: string; change: number }>;
+      stakeholders: string[];
+      infraReadiness: number;
+      riskLevel: "low" | "medium" | "high";
+      riskDrivers: string[];
+      timeline: Array<{ year: number; label: string }>;
     }>;
   };
   modCommunity?: {
