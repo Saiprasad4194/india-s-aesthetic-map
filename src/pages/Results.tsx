@@ -44,7 +44,7 @@ const Results = () => {
     timestamp: Date.now(),
   };
 
-  const { role, state, lang, modules } = data;
+  const { role, state, lang, modules } = effectiveData;
 
   const getStatusIcon = (status: "positive" | "neutral" | "risk") => {
     switch (status) {
