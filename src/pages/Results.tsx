@@ -30,26 +30,19 @@ const Results = () => {
     setAIResult(getAIResult());
   }, []);
 
-  if (!data) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background">
-        <Header />
-        <main className="flex-1 container py-8">
-          <Card className="max-w-lg mx-auto">
-            <CardContent className="py-12 text-center">
-              <AlertTriangle className="w-12 h-12 text-warning mx-auto mb-4" />
-              <h2 className="text-xl font-semibold mb-2">No Analysis Data</h2>
-              <p className="text-muted-foreground mb-4">Please go to the Input page and run an analysis first.</p>
-              <Link to="/" className="inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90">
-                Go to Input
-              </Link>
-            </CardContent>
-          </Card>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  // If no data exists, use defaults so results page always shows something
+  const effectiveData: AnalysisData = data ?? {
+    role: "central",
+    state: "Maharashtra",
+    lang: "en",
+    lawText: "",
+    modules: {
+      modLegal: true, modEconomic: true, modGeo: true, modCommunity: true,
+      modGender: true, modGlobal: true, modPrevious: true, modFuture: true,
+      modEnvironmental: true, modSentiment: true, modRiskScore: true,
+    },
+    timestamp: Date.now(),
+  };
 
   const { role, state, lang, modules } = data;
 

@@ -235,14 +235,14 @@ const Maps = () => {
                   className="max-w-full h-auto rounded-lg border border-border"
                   style={{ maxHeight: "600px" }}
                 />
-                {Object.entries(stateImpactData).map(([key, state]) => {
-                  const position = statePositions[key];
-                  if (!position) return null;
+                {Object.entries(statePositions).map(([key, position]) => {
+                  const stateData = stateImpactData[key];
+                  const colorClass = stateData ? getImpactColor(stateData.impact) : "bg-muted-foreground/40";
                   return (
                     <button
                       key={key}
                       onClick={() => setSelectedState(key)}
-                      className={`absolute z-10 w-4 h-4 rounded-full ${getImpactColor(state.impact)}
+                      className={`absolute z-10 w-4 h-4 rounded-full ${colorClass}
                         border-2 border-white shadow-md cursor-pointer transition-transform hover:scale-150
                         ${selectedState === key ? "ring-2 ring-primary ring-offset-1 scale-150" : ""}`}
                       style={{ top: position.top, left: position.left, transform: "translate(-50%, -50%)" }}
