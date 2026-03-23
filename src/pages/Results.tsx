@@ -30,28 +30,21 @@ const Results = () => {
     setAIResult(getAIResult());
   }, []);
 
-  if (!data) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background">
-        <Header />
-        <main className="flex-1 container py-8">
-          <Card className="max-w-lg mx-auto">
-            <CardContent className="py-12 text-center">
-              <AlertTriangle className="w-12 h-12 text-warning mx-auto mb-4" />
-              <h2 className="text-xl font-semibold mb-2">No Analysis Data</h2>
-              <p className="text-muted-foreground mb-4">Please go to the Input page and run an analysis first.</p>
-              <Link to="/" className="inline-flex items-center justify-center px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90">
-                Go to Input
-              </Link>
-            </CardContent>
-          </Card>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  // If no data exists, use defaults so results page always shows something
+  const effectiveData: AnalysisData = data ?? {
+    role: "central",
+    state: "Maharashtra",
+    lang: "en",
+    lawText: "",
+    modules: {
+      modLegal: true, modEconomic: true, modGeo: true, modCommunity: true,
+      modGender: true, modGlobal: true, modPrevious: true, modFuture: true,
+      modEnvironmental: true, modSentiment: true, modRiskScore: true,
+    },
+    timestamp: Date.now(),
+  };
 
-  const { role, state, lang, modules } = data;
+  const { role, state, lang, modules } = effectiveData;
 
   const getStatusIcon = (status: "positive" | "neutral" | "risk") => {
     switch (status) {
@@ -282,7 +275,7 @@ const Results = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <PDFExport data={data} aiResult={aiResult} />
+              <PDFExport data={effectiveData} aiResult={aiResult} />
               <div className="flex gap-4">
                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-success" /><span className="text-sm">Positive</span></div>
                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-warning" /><span className="text-sm">Neutral</span></div>
@@ -296,7 +289,7 @@ const Results = () => {
           {cards.map((card) => {
             const aiModuleKey = card.id === "legal" ? "modLegal" : card.id === "economic" ? "modEconomic" : card.id === "geo" ? "modGeo" : card.id === "community" ? "modCommunity" : card.id === "gender" ? "modGender" : card.id === "environmental" ? "modEnvironmental" : card.id === "sentiment" ? "modSentiment" : card.id === "riskScore" ? "modRiskScore" : card.id === "global" ? "modGlobal" : card.id === "previous" ? "modPrevious" : "modFuture";
             const aiModuleResult = aiResult?.[aiModuleKey] as any;
-            const confidence = aiModuleResult?.confidence || pseudoRandomPercent(card.id + data.timestamp);
+            const confidence = aiModuleResult?.confidence || pseudoRandomPercent(card.id + effectiveData.timestamp);
             const Icon = card.icon;
 
             return (
