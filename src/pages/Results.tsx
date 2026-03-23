@@ -275,7 +275,7 @@ const Results = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <PDFExport data={data} aiResult={aiResult} />
+              <PDFExport data={effectiveData} aiResult={aiResult} />
               <div className="flex gap-4">
                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-success" /><span className="text-sm">Positive</span></div>
                 <div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-warning" /><span className="text-sm">Neutral</span></div>
