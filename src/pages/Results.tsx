@@ -289,7 +289,7 @@ const Results = () => {
           {cards.map((card) => {
             const aiModuleKey = card.id === "legal" ? "modLegal" : card.id === "economic" ? "modEconomic" : card.id === "geo" ? "modGeo" : card.id === "community" ? "modCommunity" : card.id === "gender" ? "modGender" : card.id === "environmental" ? "modEnvironmental" : card.id === "sentiment" ? "modSentiment" : card.id === "riskScore" ? "modRiskScore" : card.id === "global" ? "modGlobal" : card.id === "previous" ? "modPrevious" : "modFuture";
             const aiModuleResult = aiResult?.[aiModuleKey] as any;
-            const confidence = aiModuleResult?.confidence || pseudoRandomPercent(card.id + data.timestamp);
+            const confidence = aiModuleResult?.confidence || pseudoRandomPercent(card.id + effectiveData.timestamp);
             const Icon = card.icon;
 
             return (
